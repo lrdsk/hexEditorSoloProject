@@ -13,19 +13,17 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class MainFrame extends JFrame {
-    private final CustomFileReader customFileReader;
     private List<String[]> stringsArray;
     private ByteTableModel bTableModel;
     private JTable byteTable;
     private JScrollPane byteTableScrollPane;
-    private int previousRow = -1;
-    private int previousColumn = -1;
     private JButton buttonShowDecimal;
     private JButton buttonShowLengthSeq;
-    private MainFrame thisFrame;
+    private int previousRow = -1;
+    private int previousColumn = -1;
+
 
     public MainFrame(CustomFileReader customFileReader){
-        this.customFileReader = customFileReader;
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователност");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
@@ -33,7 +31,6 @@ public class MainFrame extends JFrame {
         this.byteTable = new JTable(bTableModel);
         this.byteTableScrollPane = new JScrollPane(byteTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.thisFrame = this;
         init();
     }
 
@@ -43,6 +40,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
+
         byteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         byteTable.setDefaultRenderer(Object.class, new ColorfulTableCellRenderer());
         byteTableScrollPane.setPreferredSize(new Dimension(500,500));
@@ -57,10 +55,9 @@ public class MainFrame extends JFrame {
         buttonShowLengthSeq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SelectLengthSeqFrame(getValueInCell(), thisFrame).setVisible(true);
+                new SelectLengthSeqFrame(getIndexesCellInTable(), stringsArray).setVisible(true);
             }
         });
-
         byteTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,15 +83,17 @@ public class MainFrame extends JFrame {
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,
                 new Insets(1,1,1,1),0,0));
     }
-    public String getSeqInTable(int count){
-        return "";
-    }
-    public String getValueInCell(){
+
+    public int[] getIndexesCellInTable(){
         int selectedRow = byteTable.getSelectedRow();
         int selectedColumn = byteTable.getSelectedColumn();
+        return new int[]{selectedRow,selectedColumn};
+    }
+    public String getValueInCell(){
+        int[] indexes = getIndexesCellInTable();
         Object selectedValue = null;
-        if(selectedRow != -1 && selectedColumn != -1) {
-            selectedValue = byteTable.getValueAt(selectedRow, selectedColumn);
+        if(indexes[0] != -1 && indexes[1] != -1) {
+            selectedValue = byteTable.getValueAt(indexes[0], indexes[1]);
         }
         return (String) selectedValue;
     }

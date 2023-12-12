@@ -4,19 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class SelectLengthSeqFrame extends JFrame {
     private JButton twoSizeButton;
     private JButton fourSizeButton;
     private JButton eightSizeButton;
-    private MainFrame mainFrame;
     private final JLabel jLabel;
-    public SelectLengthSeqFrame(String hexCell, MainFrame mainFrame){
+    private List<String[]> stringsArray;
+    private int[] indexes;
+    public SelectLengthSeqFrame(int[] indexes, List<String[]> stringsArray){
+        this.indexes = indexes;
         this.twoSizeButton = new JButton("2");
         this.fourSizeButton = new JButton("4");
         this.eightSizeButton = new JButton("8");
-        this.mainFrame = mainFrame;
         this.jLabel = new JLabel("Выберете длину для последовательности");
+        this.stringsArray = stringsArray;
         init();
     }
 
@@ -29,19 +32,23 @@ public class SelectLengthSeqFrame extends JFrame {
         twoSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(mainFrame.getSeqInTable(2));
+                new SequenceFrame(indexes,2, stringsArray).setVisible(true);
+                dispose();
             }
         });
         fourSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainFrame.getSeqInTable(4);
+                new SequenceFrame(indexes,4, stringsArray).setVisible(true);
+                dispose();
             }
         });
         eightSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainFrame.getSeqInTable(8);
+                new SequenceFrame(indexes,8, stringsArray).setVisible(true);
+                dispose();
+
             }
         });
 

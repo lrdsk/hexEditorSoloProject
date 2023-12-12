@@ -1,4 +1,5 @@
 import frames.MainFrame;
+import frames.SequenceFrame;
 import utils.CustomFileReader;
 
 import java.nio.file.Path;
