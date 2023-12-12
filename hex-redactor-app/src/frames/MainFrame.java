@@ -20,42 +20,47 @@ public class MainFrame extends JFrame {
     private JScrollPane byteTableScrollPane;
     private int previousRow = -1;
     private int previousColumn = -1;
-    private JButton buttonShow;
+    private JButton buttonShowDecimal;
+    private JButton buttonShowLengthSeq;
+    private MainFrame thisFrame;
 
     public MainFrame(CustomFileReader customFileReader){
         this.customFileReader = customFileReader;
-        this.buttonShow = new JButton("Показать");
+        this.buttonShowDecimal = new JButton("Десятичное представление");
+        this.buttonShowLengthSeq = new JButton("Последователност");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
-        setTitle("Test frame");
         this.bTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(bTableModel);
         this.byteTableScrollPane = new JScrollPane(byteTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.thisFrame = this;
         init();
     }
 
     public void init(){
+        setTitle("Test frame");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
+        byteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        byteTable.setDefaultRenderer(Object.class, new ColorfulTableCellRenderer());
+        byteTableScrollPane.setPreferredSize(new Dimension(500,500));
+        bTableModel.addDate(stringsArray);
 
-        buttonShow.addActionListener(new ActionListener() {
+        buttonShowDecimal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = byteTable.getSelectedRow();
-                int selectedColumn = byteTable.getSelectedColumn();
-                Object selectedValue = null;
-                if(selectedRow != -1 && selectedColumn != -1) {
-                    selectedValue = byteTable.getValueAt(selectedRow, selectedColumn);
-                }
-
-                //new CurrentDecimalByteForm((String) selectedValue).create();
+                new CurrentDecimalByteFrame(getValueInCell()).setVisible(true);
+            }
+        });
+        buttonShowLengthSeq.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SelectLengthSeqFrame(getValueInCell(), thisFrame).setVisible(true);
             }
         });
 
-        byteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        byteTable.setDefaultRenderer(Object.class, new ColorfulTableCellRenderer());
         byteTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -70,20 +75,31 @@ public class MainFrame extends JFrame {
             }
         });
 
-        byteTableScrollPane.setPreferredSize(new Dimension(500,500));
-
-        add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
+        add(byteTableScrollPane, new GridBagConstraints(0,0,2,1,1,1,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,
                 new Insets(1,1,1,1),0,0));
 
-        add(buttonShow, new GridBagConstraints(0,1,0,0,0,0,
+        add(buttonShowDecimal, new GridBagConstraints(0,1,1,0,0,0,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,
                 new Insets(1,1,1,1),0,0));
-
-        bTableModel.addDate(stringsArray);
+        add(buttonShowLengthSeq, new GridBagConstraints(1,1,1,0,0,0,
+                GridBagConstraints.NORTH,GridBagConstraints.BOTH,
+                new Insets(1,1,1,1),0,0));
     }
-    private class ColorfulTableCellRenderer extends DefaultTableCellRenderer {
+    public String getSeqInTable(int count){
+        return "";
+    }
+    public String getValueInCell(){
+        int selectedRow = byteTable.getSelectedRow();
+        int selectedColumn = byteTable.getSelectedColumn();
+        Object selectedValue = null;
+        if(selectedRow != -1 && selectedColumn != -1) {
+            selectedValue = byteTable.getValueAt(selectedRow, selectedColumn);
+        }
+        return (String) selectedValue;
+    }
 
+    private class ColorfulTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
