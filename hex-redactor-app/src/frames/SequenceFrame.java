@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +15,7 @@ public class SequenceFrame extends JFrame {
     private final JButton buttonToDecimalSigned;
     private final JButton buttonToDecimalUnsigned;
     private final JButton buttonToDoubleSinglePrecision;
-    private final JButton buttonToDoUbleDoublePrecision;
+    private final JButton buttonToDoubleDoublePrecision;
     private final int lengthSeq;
     private final List<String[]> stringsArray;
     private final int[] indexes;
@@ -21,7 +24,7 @@ public class SequenceFrame extends JFrame {
         this.buttonToDecimalSigned = new JButton("10-ое со знаком");
         this.buttonToDecimalUnsigned = new JButton("10-ое без знака");
         this.buttonToDoubleSinglePrecision = new JButton("вещ-ое 1-ой точности");
-        this.buttonToDoUbleDoublePrecision = new JButton("вещ-ое 2-ой точности");
+        this.buttonToDoubleDoublePrecision = new JButton("вещ-ое 2-ой точности");
         this.indexes = indexes;
         this.lengthSeq = lengthSeq;
         this.stringsArray = stringsArray;
@@ -42,7 +45,7 @@ public class SequenceFrame extends JFrame {
         buttonPanel.add(buttonToDecimalSigned);
         buttonPanel.add(buttonToDecimalUnsigned);
         buttonPanel.add(buttonToDoubleSinglePrecision);
-        buttonPanel.add(buttonToDoUbleDoublePrecision);
+        buttonPanel.add(buttonToDoubleDoublePrecision);
 
         add(jLabelSeq, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -50,22 +53,52 @@ public class SequenceFrame extends JFrame {
         buttonToDecimalSigned.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StringBuilder resultSeq = new StringBuilder();
+                StringBuilder resultCell = new StringBuilder();
                 for(String hexCell : hexSequence) {
                     int decimalNumber = Integer.parseInt(hexCell, 16);
                     if ((decimalNumber & 0x8000) != 0) {
                         decimalNumber -= 0x10000;
                     }
-                    resultSeq.append(decimalNumber).append("\t");
+                    resultCell.append(decimalNumber).append(" ");
                 }
-                jLabelSeq.setText(resultSeq.toString());
+                jLabelSeq.setText(resultCell.toString());
             }
         });
 
         buttonToDecimalUnsigned.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jLabelSeq.setText(String.valueOf(Integer.parseUnsignedInt(Arrays.toString(hexSequence),16)));
+                StringBuilder resultCell = new StringBuilder();
+                for(String hexCell : hexSequence){
+                    int decimalNumber = Integer.parseUnsignedInt(hexCell,16);
+                    resultCell.append(decimalNumber).append(" ");
+                }
+                jLabelSeq.setText(resultCell.toString());
+            }
+        });
+        buttonToDoubleSinglePrecision.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder resultCell = new StringBuilder();
+                for(String hexCell : hexSequence){
+                    int intValue = Integer.parseInt(hexCell, 16);
+                    float floatValue = Float.intBitsToFloat(intValue);
+                    resultCell.append(floatValue).append(" ");
+                }
+                jLabelSeq.setText(resultCell.toString());
+            }
+        });
+
+        buttonToDoubleDoublePrecision.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder resultCell = new StringBuilder();
+                for(String hexCell : hexSequence){
+                    int intValue = Integer.parseInt(hexCell, 16);
+                    double doubleValue = Float.intBitsToFloat(intValue);
+                    resultCell.append(doubleValue).append(" ");
+                }
+                jLabelSeq.setText(resultCell.toString());
             }
         });
 

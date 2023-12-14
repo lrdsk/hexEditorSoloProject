@@ -25,7 +25,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame(CustomFileReader customFileReader){
         this.buttonShowDecimal = new JButton("Десятичное представление");
-        this.buttonShowLengthSeq = new JButton("Последователност");
+        this.buttonShowLengthSeq = new JButton("Последователность");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
         this.bTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(bTableModel);
@@ -56,6 +56,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new SelectLengthSeqFrame(getIndexesCellInTable(), stringsArray).setVisible(true);
+                new SearchFrame(stringsArray).setVisible(true);
             }
         });
         byteTable.addMouseListener(new MouseAdapter() {
