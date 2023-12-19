@@ -13,12 +13,15 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class MainFrame extends JFrame {
-    private List<String[]> stringsArray;
-    private ByteTableModel bTableModel;
-    private JTable byteTable;
-    private JScrollPane byteTableScrollPane;
-    private JButton buttonShowDecimal;
-    private JButton buttonShowLengthSeq;
+    private final List<String[]> stringsArray;
+    private final ByteTableModel bTableModel;
+    private final JTable byteTable;
+    private final JScrollPane byteTableScrollPane;
+    private final JButton buttonShowDecimal;
+    private final JButton buttonShowLengthSeq;
+    private final JButton buttonDeleteCell;
+    private final JButton buttonPasteCell;
+    private final JButton buttonCutCell;
     private int previousRow = -1;
     private int previousColumn = -1;
 
@@ -26,6 +29,9 @@ public class MainFrame extends JFrame {
     public MainFrame(CustomFileReader customFileReader){
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
+        this.buttonDeleteCell = new JButton("Удаление");
+        this.buttonPasteCell = new JButton("Вставка");
+        this.buttonCutCell = new JButton("Вырезать");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
         this.bTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(bTableModel);
@@ -43,6 +49,7 @@ public class MainFrame extends JFrame {
 
         byteTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         byteTable.setDefaultRenderer(Object.class, new ColorfulTableCellRenderer());
+        byteTable.getTableHeader().setReorderingAllowed(false);
         byteTableScrollPane.setPreferredSize(new Dimension(500,500));
         bTableModel.addDate(stringsArray);
 
@@ -59,6 +66,16 @@ public class MainFrame extends JFrame {
                 new SearchFrame(stringsArray).setVisible(true);
             }
         });
+        buttonDeleteCell.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] indexes = getIndexesCellInTable();
+                int row = byteTable.getSelectedRow();
+                int column = byteTable.getSelectedColumn();
+                bTableModel.setValueAt(0, row, column);
+                System.out.println("row: " + row + " column: " + column + " value: " + bTableModel.getValueAt(row, column));
+            }
+        });
         byteTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -73,7 +90,17 @@ public class MainFrame extends JFrame {
             }
         });
 
-        add(byteTableScrollPane, new GridBagConstraints(0,0,2,1,1,1,
+        JPanel buttonsEditPanel = new JPanel();
+        buttonsEditPanel.setLayout(new GridLayout(3,1));
+        buttonsEditPanel.add(buttonDeleteCell);
+        buttonsEditPanel.add(buttonPasteCell);
+        buttonsEditPanel.add(buttonCutCell);
+
+        add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
+                GridBagConstraints.NORTH,GridBagConstraints.BOTH,
+                new Insets(1,1,1,1),0,0));
+
+        add(buttonsEditPanel, new GridBagConstraints(1,0,1,1,0,0,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,
                 new Insets(1,1,1,1),0,0));
 

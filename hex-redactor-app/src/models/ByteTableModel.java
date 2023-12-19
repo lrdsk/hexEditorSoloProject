@@ -38,6 +38,18 @@ public class ByteTableModel extends AbstractTableModel {
         return "";
     }
 
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true; // Позволяет редактирование всех ячеек
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        String[] row = dataArrayList.get(rowIndex);
+        row[columnIndex] = value.toString();
+        fireTableCellUpdated(rowIndex, columnIndex);
+    }
+
     public void addDate(List<String[]> rows){
         dataArrayList.addAll(rows);
     }
