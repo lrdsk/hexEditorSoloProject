@@ -1,4 +1,6 @@
-package frames;
+package frames.functional;
+
+import utils.SequenceHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +18,7 @@ public class SequenceFrame extends JFrame {
     private final int lengthSeq;
     private final List<String[]> stringsArray;
     private final int[] indexes;
-    public SequenceFrame(int[] indexes, int lengthSeq, List<String[]> stringsArray){
+    public SequenceFrame(int[] indexes, int lengthSeq, List<String[]> stringsArray) throws HeadlessException{
         this.jLabelSeq = new JLabel();
         this.buttonToDecimalSigned = new JButton("10-ое со знаком");
         this.buttonToDecimalUnsigned = new JButton("10-ое без знака");
@@ -28,13 +30,13 @@ public class SequenceFrame extends JFrame {
         init();
     }
 
-    public void init(){
+    private void init(){
         setTitle("Последовательность");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        String[] hexSequence = getSequenceByIndex();
+        String[] hexSequence = SequenceHandler.getSequenceByIndex(indexes, lengthSeq, stringsArray);
         jLabelSeq.setText(Arrays.toString(hexSequence));
 
         JPanel buttonPanel = new JPanel();
@@ -52,7 +54,10 @@ public class SequenceFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 StringBuilder resultCell = new StringBuilder();
                 for(String hexCell : hexSequence) {
-                    int decimalNumber = Integer.parseInt(hexCell, 16);
+                    int decimalNumber = 0;
+                    if(hexCell != null){
+                        decimalNumber = Integer.parseInt(hexCell, 16);
+                    }
                     if ((decimalNumber & 0x8000) != 0) {
                         decimalNumber -= 0x10000;
                     }
@@ -67,7 +72,10 @@ public class SequenceFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 StringBuilder resultCell = new StringBuilder();
                 for(String hexCell : hexSequence){
-                    int decimalNumber = Integer.parseUnsignedInt(hexCell,16);
+                    int decimalNumber = 0;
+                    if(hexCell != null) {
+                        decimalNumber = Integer.parseUnsignedInt(hexCell, 16);
+                    }
                     resultCell.append(decimalNumber).append(" ");
                 }
                 jLabelSeq.setText(resultCell.toString());
@@ -78,8 +86,12 @@ public class SequenceFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 StringBuilder resultCell = new StringBuilder();
                 for(String hexCell : hexSequence){
-                    int intValue = Integer.parseInt(hexCell, 16);
-                    float floatValue = Float.intBitsToFloat(intValue);
+                    int intValue = 0;
+                    float floatValue = 0;
+                    if(hexCell != null){
+                        intValue = Integer.parseInt(hexCell, 16);
+                        floatValue = Float.intBitsToFloat(intValue);
+                    }
                     resultCell.append(floatValue).append(" ");
                 }
                 jLabelSeq.setText(resultCell.toString());
@@ -91,8 +103,13 @@ public class SequenceFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 StringBuilder resultCell = new StringBuilder();
                 for(String hexCell : hexSequence){
-                    int intValue = Integer.parseInt(hexCell, 16);
-                    double doubleValue = Float.intBitsToFloat(intValue);
+                    int intValue = 0;
+                    double doubleValue = 0;
+                    if(hexCell != null){
+                        intValue = Integer.parseInt(hexCell, 16);
+                        doubleValue = Float.intBitsToFloat(intValue);
+                    }
+
                     resultCell.append(doubleValue).append(" ");
                 }
                 jLabelSeq.setText(resultCell.toString());

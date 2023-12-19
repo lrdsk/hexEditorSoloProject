@@ -1,4 +1,6 @@
-package frames;
+package frames.help;
+
+import frames.functional.SequenceFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +15,7 @@ public class SelectLengthSeqFrame extends JFrame {
     private final JLabel jLabel;
     private List<String[]> stringsArray;
     private int[] indexes;
-    public SelectLengthSeqFrame(int[] indexes, List<String[]> stringsArray){
+    public SelectLengthSeqFrame(int[] indexes, List<String[]> stringsArray) throws HeadlessException{
         this.indexes = indexes;
         this.twoSizeButton = new JButton("2");
         this.fourSizeButton = new JButton("4");
@@ -23,7 +25,7 @@ public class SelectLengthSeqFrame extends JFrame {
         init();
     }
 
-    public void init(){
+    private void init(){
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);

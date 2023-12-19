@@ -1,7 +1,9 @@
-import frames.FileDisplayFrame;
+import frames.functional.FileDisplayFrame;
 import utils.CustomFileReader;
 import java.io.File;
 import java.nio.file.Path;
+
+
 public class Main {
     public static void main(String[] args) {
         Path path = new File("/home/user/java_tasks/hex-redactor/homework/test.txt").toPath();

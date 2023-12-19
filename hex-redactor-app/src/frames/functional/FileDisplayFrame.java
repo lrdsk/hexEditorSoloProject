@@ -1,5 +1,8 @@
-package frames;
+package frames.functional;
 
+import frames.SearchFrame;
+import frames.help.SelectLengthOfCellsFrame;
+import frames.help.SelectLengthSeqFrame;
 import models.ByteTableModel;
 import utils.CustomFileReader;
 import utils.CustomFileWriter;
@@ -29,7 +32,7 @@ public class FileDisplayFrame extends JFrame {
     private int previousColumn = -1;
 
 
-    public FileDisplayFrame(CustomFileReader customFileReader){
+    public FileDisplayFrame(CustomFileReader customFileReader) throws HeadlessException{
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удаление");
@@ -44,8 +47,8 @@ public class FileDisplayFrame extends JFrame {
         init();
     }
 
-    public void init(){
-        setTitle("Test frame");
+    private void init(){
+        setTitle("Main frame");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -74,7 +77,7 @@ public class FileDisplayFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int[] indexes = getIndexesCellInTable();
-                bTableModel.setValueAt(0, indexes[0], indexes[1]);
+                new SelectLengthOfCellsFrame(bTableModel, indexes).setVisible(true);
                 System.out.println("row: " + indexes[0] + " column: " + indexes[1] + " value: " + bTableModel.getValueAt(indexes[0], indexes[1]));
             }
         });

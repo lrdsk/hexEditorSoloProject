@@ -13,21 +13,21 @@ public class SearchFrame extends JFrame {
     private final JButton searchButton;
     private final List<String[]> table;
 
-    public SearchFrame(List<String[]> table){
+    public SearchFrame(List<String[]> table) throws HeadlessException{
         this.searchTextField = new JTextField();
         this.searchButton = new JButton("Поиск");
         this.table = table;
         init();
     }
 
-    public void init(){
+    private void init(){
         setTitle("Search frame");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
 
-        List<String[]> str = findPatternInTable(table, "102 100");
+        List<String[]> str = findPatternInTable(table, "30 30 66");
         for(String[] s : str){
             System.out.println(Arrays.toString(s));
         }
@@ -36,17 +36,17 @@ public class SearchFrame extends JFrame {
     public List<String[]> findPatternInTable(List<String[]> table, String pattern){
         List<String[]> matches = new ArrayList<>();
         String[] strings = pattern.split(" ");
-        byte[] bytesToSearch = new byte[strings.length];
+        /*byte[] bytesToSearch = new byte[strings.length];
         for(int i = 0; i < bytesToSearch.length; i++){
             bytesToSearch[i] = Byte.parseByte(strings[i]);
         }
-        String[] hexToSearch = SearchManager.convertBytesToHex(bytesToSearch);
+        String[] hexToSearch = SearchManager.convertBytesToHex(bytesToSearch);*/
 
         for(String[] row : table){
-            for(int i = 0; i <= row.length - hexToSearch.length; i++){
+            for(int i = 0; i <= row.length - strings.length; i++){
                 boolean matchFound = true;
-                for(int j = 0; j < hexToSearch.length; j++){
-                    if(!(row[i+j].equals(hexToSearch[j]))){
+                for(int j = 0; j < strings.length; j++){
+                    if(!(row[i+j].equals(strings[j]))){
                         matchFound = false;
                         break;
                     }

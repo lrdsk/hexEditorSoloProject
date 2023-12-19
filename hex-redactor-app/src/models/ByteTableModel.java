@@ -1,5 +1,7 @@
 package models;
 
+import utils.SequenceHandler;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,4 +58,10 @@ public class ByteTableModel extends AbstractTableModel {
     public List<String[]> getDate(){
         return dataArrayList;
     }
+
+    public void clearCells(int[] indexes, int lengthSeq){
+        SequenceHandler.clearCells(indexes, lengthSeq, dataArrayList);
+        fireTableDataChanged();
+    }
+
 }

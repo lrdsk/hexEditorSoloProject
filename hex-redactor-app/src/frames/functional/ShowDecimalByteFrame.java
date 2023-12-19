@@ -1,4 +1,4 @@
-package frames;
+package frames.functional;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +11,14 @@ public class ShowDecimalByteFrame extends JFrame {
     private JButton buttonToDecimalSigned;
     private JButton buttonToDecimalUnsigned;
 
-    public ShowDecimalByteFrame(String hexCell) {
+    public ShowDecimalByteFrame(String hexCell) throws HeadlessException {
         this.hexCell = hexCell;
         this.jLabel = new JLabel(hexCell);
         this.buttonToDecimalSigned = new JButton("В десятичное со знаком");
         this.buttonToDecimalUnsigned = new JButton("В десятичное без знака");
         init();
     }
-    public void init(){
+    private void init(){
         setTitle("Представление байта в десятичной системе");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
