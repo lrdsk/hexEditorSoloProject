@@ -2,6 +2,7 @@ package frames;
 
 import models.ByteTableModel;
 import utils.CustomFileReader;
+import utils.CustomFileWriter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -10,9 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.List;
 
-public class MainFrame extends JFrame {
+public class FileDisplayFrame extends JFrame {
     private final List<String[]> stringsArray;
     private final ByteTableModel bTableModel;
     private final JTable byteTable;
@@ -22,16 +24,18 @@ public class MainFrame extends JFrame {
     private final JButton buttonDeleteCell;
     private final JButton buttonPasteCell;
     private final JButton buttonCutCell;
+    private final JButton buttonApplyChanges;
     private int previousRow = -1;
     private int previousColumn = -1;
 
 
-    public MainFrame(CustomFileReader customFileReader){
+    public FileDisplayFrame(CustomFileReader customFileReader){
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удаление");
         this.buttonPasteCell = new JButton("Вставка");
         this.buttonCutCell = new JButton("Вырезать");
+        this.buttonApplyChanges = new JButton("Apply");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
         this.bTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(bTableModel);
@@ -56,7 +60,7 @@ public class MainFrame extends JFrame {
         buttonShowDecimal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CurrentDecimalByteFrame(getValueInCell()).setVisible(true);
+                new ShowDecimalByteFrame(getValueInCell()).setVisible(true);
             }
         });
         buttonShowLengthSeq.addActionListener(new ActionListener() {
@@ -70,10 +74,17 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int[] indexes = getIndexesCellInTable();
-                int row = byteTable.getSelectedRow();
-                int column = byteTable.getSelectedColumn();
-                bTableModel.setValueAt(0, row, column);
-                System.out.println("row: " + row + " column: " + column + " value: " + bTableModel.getValueAt(row, column));
+                bTableModel.setValueAt(0, indexes[0], indexes[1]);
+                System.out.println("row: " + indexes[0] + " column: " + indexes[1] + " value: " + bTableModel.getValueAt(indexes[0], indexes[1]));
+            }
+        });
+        buttonApplyChanges.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomFileWriter customFileWriter = new CustomFileWriter(
+                        new File("/home/user/java_tasks/hex-redactor/homework/test.txt").toPath()
+                );
+                customFileWriter.writeTableDataToFile(bTableModel.getDate());
             }
         });
         byteTable.addMouseListener(new MouseAdapter() {
@@ -91,10 +102,11 @@ public class MainFrame extends JFrame {
         });
 
         JPanel buttonsEditPanel = new JPanel();
-        buttonsEditPanel.setLayout(new GridLayout(3,1));
+        buttonsEditPanel.setLayout(new GridLayout(4,1));
         buttonsEditPanel.add(buttonDeleteCell);
         buttonsEditPanel.add(buttonPasteCell);
         buttonsEditPanel.add(buttonCutCell);
+        buttonsEditPanel.add(buttonApplyChanges);
 
         add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,

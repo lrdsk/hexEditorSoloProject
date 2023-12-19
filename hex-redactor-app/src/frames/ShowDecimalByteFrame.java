@@ -5,13 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CurrentDecimalByteFrame extends JFrame {
+public class ShowDecimalByteFrame extends JFrame {
     private final JLabel jLabel;
     private String hexCell;
     private JButton buttonToDecimalSigned;
     private JButton buttonToDecimalUnsigned;
 
-    public CurrentDecimalByteFrame(String hexCell) {
+    public ShowDecimalByteFrame(String hexCell) {
         this.hexCell = hexCell;
         this.jLabel = new JLabel(hexCell);
         this.buttonToDecimalSigned = new JButton("В десятичное со знаком");

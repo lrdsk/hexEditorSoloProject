@@ -19,24 +19,6 @@ public class CustomFileReader {
         this.path = path;
     }
 
-    private List<String[]> getBytesHexFormat(List<byte[]> byteRows){
-        final StringBuilder hex = new StringBuilder(2 * byteRows.size());
-        final List<String[]> hexRows = new ArrayList<>();
-
-        for (byte[] lineBytes : byteRows) {
-            for(byte b : lineBytes){
-                hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F))).append("\t");
-            }
-            while(hex.toString().split("\t").length < maxColumnCount){
-                hex.append(0).append("\t");
-            }
-
-            hexRows.add(hex.toString().split("\t"));
-            hex.delete(0,hex.length());
-        }
-        return hexRows;
-    }
-
     public List<String[]> readBytesFromFileToHex(){
         if(Files.exists(path) && Files.isRegularFile(path)){
             try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
@@ -58,6 +40,24 @@ public class CustomFileReader {
         }
 
         return new ArrayList<>();
+    }
+
+    private List<String[]> getBytesHexFormat(List<byte[]> byteRows){
+        final StringBuilder hex = new StringBuilder(2 * byteRows.size());
+        final List<String[]> hexRows = new ArrayList<>();
+
+        for (byte[] lineBytes : byteRows) {
+            for(byte b : lineBytes){
+                hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F))).append("\t");
+            }
+            while(hex.toString().split("\t").length < maxColumnCount){
+                hex.append(0).append("\t");
+            }
+
+            hexRows.add(hex.toString().split("\t"));
+            hex.delete(0,hex.length());
+        }
+        return hexRows;
     }
 
     public int getMaxColumnCount() {

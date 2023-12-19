@@ -53,4 +53,7 @@ public class ByteTableModel extends AbstractTableModel {
     public void addDate(List<String[]> rows){
         dataArrayList.addAll(rows);
     }
+    public List<String[]> getDate(){
+        return dataArrayList;
+    }
 }
