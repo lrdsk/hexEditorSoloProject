@@ -56,6 +56,24 @@ public class SequenceHandler {
         }
     }
 
+    public static String[] mergeRows(String[] currentRow, String[] insertedRow, int index){
+        int newArrayLength = currentRow.length + insertedRow.length;
+
+        // Создание нового массива
+        String[] mergedArray = new String[newArrayLength];
+
+        // Копирование элементов первого массива до указанного индекса
+        System.arraycopy(currentRow, 0, mergedArray, 0, index);
+
+        // Копирование элементов второго массива
+        System.arraycopy(insertedRow, 0, mergedArray, index, insertedRow.length);
+
+        // Копирование оставшихся элементов первого массива
+        System.arraycopy(currentRow, index, mergedArray, index + insertedRow.length, currentRow.length - index);
+
+        return mergedArray;
+    }
+
     public List<String> findPatternInTable(List<String[]> table, String pattern){
         String[] strings = pattern.split(" ");
         String[] stringsOverlap = new String[strings.length];

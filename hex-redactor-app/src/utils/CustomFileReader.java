@@ -25,8 +25,8 @@ public class CustomFileReader {
                 String line;
                 List<byte[]> byteRows = new ArrayList<>();
                 while ((line = bufferedReader.readLine()) != null){
-                    if(maxColumnCount < line.length()){
-                        maxColumnCount = line.length();
+                    if(maxColumnCount < line.length() + 1){
+                        maxColumnCount = line.length() + 1;
                     }
                     byte[] bytes = line.getBytes(StandardCharsets.UTF_8);
                     byteRows.add(bytes);
@@ -46,9 +46,29 @@ public class CustomFileReader {
         final StringBuilder hex = new StringBuilder(2 * byteRows.size());
         final List<String[]> hexRows = new ArrayList<>();
 
-        for (byte[] lineBytes : byteRows) {
-            for(byte b : lineBytes){
-                hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F))).append("\t");
+        for (int i = 0; i < byteRows.size(); i++) {
+            for(int j = 0; j < byteRows.get(i).length; j++){
+                byte currentByte = byteRows.get(i)[j];
+                if(currentByte != 48) {
+                    if (j == 0) {
+                        hex
+                                .append(i + 1)
+                                .append("\t");
+                    }
+                    hex
+                            .append(HEXES.charAt((currentByte & 0xF0) >> 4))
+                            .append(HEXES.charAt((currentByte & 0x0F)))
+                            .append("\t");
+                }else{
+                    if(j == 0) {
+                        hex
+                                .append(i + 1)
+                                .append("\t");
+                    }
+                    hex
+                            .append(0)
+                            .append("\t");
+                }
             }
             while(hex.toString().split("\t").length < maxColumnCount){
                 hex.append(0).append("\t");

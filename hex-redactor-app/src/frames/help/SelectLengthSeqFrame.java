@@ -15,7 +15,7 @@ public class SelectLengthSeqFrame extends JFrame {
     private final JLabel jLabel;
     private List<String[]> stringsArray;
     private int[] indexes;
-    public SelectLengthSeqFrame(int[] indexes, List<String[]> stringsArray) throws HeadlessException{
+    public SelectLengthSeqFrame(List<String[]> stringsArray, int[] indexes) throws HeadlessException{
         this.indexes = indexes;
         this.twoSizeButton = new JButton("2");
         this.fourSizeButton = new JButton("4");

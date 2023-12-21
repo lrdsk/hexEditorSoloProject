@@ -118,31 +118,4 @@ public class SequenceFrame extends JFrame {
 
         pack();
     }
-
-    public String[] getSequenceByIndex(){
-        String[] row = stringsArray.get(indexes[0]);
-        if(indexes[1] + lengthSeq > row.length){
-            int itSeq = 0;
-            int curIndexRow = indexes[0];
-            int curIndexColumn = indexes[1];
-            int remainRows = stringsArray.size() - curIndexRow;
-            String[] resultSeq = new String[lengthSeq];
-
-            while(remainRows > 0 && itSeq < lengthSeq){
-                resultSeq[itSeq] = row[curIndexColumn];
-                itSeq++;
-                curIndexColumn++;
-                if(!(curIndexColumn < row.length)){
-                    curIndexColumn = 0;
-                    curIndexRow++;
-                    remainRows = stringsArray.size() - curIndexRow;
-                    if(curIndexRow < stringsArray.size()){
-                        row = stringsArray.get(curIndexRow);
-                    }
-                }
-            }
-            return  resultSeq;
-        }
-        return Arrays.copyOfRange(row, indexes[1], indexes[1]+lengthSeq);
-    }
 }

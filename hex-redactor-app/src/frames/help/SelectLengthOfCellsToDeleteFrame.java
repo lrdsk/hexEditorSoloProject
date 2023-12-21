@@ -6,19 +6,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SelectLengthOfCellsFrame extends JFrame {
+public class SelectLengthOfCellsToDeleteFrame extends JFrame {
     private final ByteTableModel byteTableModel;
     private final JLabel labelLengthOfCells;
     private final JTextField textFieldLengthOfCells;
     private final JButton buttonSelect;
-    private final int[] indexes;
+    private final int row;
+    private final int column;
 
-    public SelectLengthOfCellsFrame(ByteTableModel byteTableModel, int[] indexes) throws HeadlessException {
+    public SelectLengthOfCellsToDeleteFrame(ByteTableModel byteTableModel, int[] indexes) throws HeadlessException {
         this.byteTableModel = byteTableModel;
         this.labelLengthOfCells = new JLabel("Введите длину для удаления: ");
         this.textFieldLengthOfCells = new JTextField();
         this.buttonSelect = new JButton("Выбрать");
-        this.indexes = indexes;
+        this.row = indexes[0];
+        this.column = indexes[1];
         init();
     }
 
@@ -37,7 +39,7 @@ public class SelectLengthOfCellsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int length = Integer.parseInt(textFieldLengthOfCells.getText());
-                byteTableModel.clearCells(indexes, length);
+                byteTableModel.clearCells(row, column, length);
                 dispose();
             }
         });
