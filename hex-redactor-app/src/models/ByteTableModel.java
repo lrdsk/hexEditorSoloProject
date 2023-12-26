@@ -4,7 +4,6 @@ import utils.SequenceHandler;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ByteTableModel extends AbstractTableModel {
@@ -72,19 +71,27 @@ public class ByteTableModel extends AbstractTableModel {
         return result;
     }
 
-    public void clearCells(int row, int column, int lengthSeq){
-        if(column > 0) {
-            SequenceHandler.clearCells(new int[]{row,column}, lengthSeq, dataArrayList);
+    public void clearCells(int rowIndex, int columnIndex, int lengthSeq){
+        if(columnIndex > 0) {
+            SequenceHandler.clearCells(new int[]{rowIndex,columnIndex}, lengthSeq, dataArrayList);
             fireTableDataChanged();
         }
     }
 
-    public List<String[]> insertCells(int row, int column, String[] cells){
+    public List<String[]> insertCells(int rowIndex, int columnIndex, String[] cells, boolean replacement){
         List<String[]> dataArrayListInserted = dataArrayList;
-        String[] currentRow = dataArrayList.get(row);
-        String[] rowToInsert = SequenceHandler.mergeRows(currentRow, cells, column);
-        dataArrayListInserted.remove(row);
-        dataArrayListInserted.add(row, rowToInsert);
+        String[] currentRow = dataArrayList.get(rowIndex);
+        String[] rowToInsert;
+
+        if(!replacement) {
+            rowToInsert = SequenceHandler.mergeRows(currentRow, cells, columnIndex);
+
+        }else{
+            rowToInsert = SequenceHandler.replaceRows(currentRow, cells, columnIndex);
+        }
+
+        dataArrayListInserted.remove(rowIndex);
+        dataArrayListInserted.add(rowIndex, rowToInsert);
 
         return dataArrayListInserted;
     }

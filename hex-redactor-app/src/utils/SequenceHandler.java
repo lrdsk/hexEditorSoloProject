@@ -68,6 +68,27 @@ public class SequenceHandler {
         return mergedArray;
     }
 
+    public static String[] replaceRows(String[] currentRow, String[] insertedRow, int index){
+        int newArrayLength = 0;
+        String[] mergedArray;
+
+        if(currentRow.length - index >= insertedRow.length){
+            newArrayLength = currentRow.length;
+            mergedArray = new String[newArrayLength];
+            System.arraycopy(currentRow, 0, mergedArray, 0, index);
+            System.arraycopy(insertedRow, 0, mergedArray, index, insertedRow.length);
+            System.arraycopy(currentRow, index + insertedRow.length,
+                    mergedArray, index + insertedRow.length, currentRow.length - index - insertedRow.length);
+        }else{
+            newArrayLength = currentRow.length - (currentRow.length - index) + insertedRow.length;
+            mergedArray = new String[newArrayLength];
+            System.arraycopy(currentRow, 0, mergedArray, 0, index);
+            System.arraycopy(insertedRow, 0, mergedArray, index, insertedRow.length);
+        }
+
+        return mergedArray;
+    }
+
     public static int getMaxColumnCountInTable(List<String[]> table){
         int max = 0;
         for(String[] row : table){
