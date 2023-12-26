@@ -79,12 +79,13 @@ public class ByteTableModel extends AbstractTableModel {
         }
     }
 
-    public void insertCells(int row, int column, String[] cells){
+    public List<String[]> insertCells(int row, int column, String[] cells){
         List<String[]> dataArrayListInserted = dataArrayList;
         String[] currentRow = dataArrayList.get(row);
         String[] rowToInsert = SequenceHandler.mergeRows(currentRow, cells, column);
         dataArrayListInserted.remove(row);
         dataArrayListInserted.add(row, rowToInsert);
-        fireTableDataChanged();
+
+        return dataArrayListInserted;
     }
 }

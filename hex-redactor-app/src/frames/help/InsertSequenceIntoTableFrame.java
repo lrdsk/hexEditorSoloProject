@@ -1,11 +1,13 @@
 package frames.help;
 
 import models.ByteTableModel;
+import utils.SequenceHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class InsertSequenceIntoTableFrame extends JFrame{
     private final JLabel labelLengthOfCells;
@@ -44,9 +46,14 @@ public class InsertSequenceIntoTableFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
-                byteTableModel.insertCells(row, column, cellsToInsert);
-                jTable.revalidate();
-                jTable.repaint();
+
+                List<String[]> dateInserted = byteTableModel.insertCells(row, column, cellsToInsert);
+                dateInserted = SequenceHandler.fillTableWithZeros(dateInserted);
+
+                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dateInserted));
+                byteTableModelInserted.addDate(dateInserted);
+
+                jTable.setModel(byteTableModelInserted);
                 dispose();
             }
         });

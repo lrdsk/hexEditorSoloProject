@@ -78,7 +78,7 @@ public class FileDisplayFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int[] indexes = getIndexesCellInTable();
-                new SelectLengthOfCellsToDeleteFrame(byteTableModel, indexes).setVisible(true);
+                new SelectLengthOfCellsToDeleteFrame((ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
                 System.out.println("row: " + indexes[0] + " column: " + indexes[1] + " value: " + byteTableModel.getValueAt(indexes[0], indexes[1]));
             }
         });

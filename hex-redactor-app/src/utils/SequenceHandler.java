@@ -59,19 +59,41 @@ public class SequenceHandler {
     public static String[] mergeRows(String[] currentRow, String[] insertedRow, int index){
         int newArrayLength = currentRow.length + insertedRow.length;
 
-        // Создание нового массива
         String[] mergedArray = new String[newArrayLength];
 
-        // Копирование элементов первого массива до указанного индекса
         System.arraycopy(currentRow, 0, mergedArray, 0, index);
-
-        // Копирование элементов второго массива
         System.arraycopy(insertedRow, 0, mergedArray, index, insertedRow.length);
-
-        // Копирование оставшихся элементов первого массива
         System.arraycopy(currentRow, index, mergedArray, index + insertedRow.length, currentRow.length - index);
 
         return mergedArray;
+    }
+
+    public static int getMaxColumnCountInTable(List<String[]> table){
+        int max = 0;
+        for(String[] row : table){
+            if(row.length > max){
+                max = row.length;
+            }
+        }
+        return max;
+    }
+
+    public static List<String[]> fillTableWithZeros(List<String[]> table){
+        int maxColumnSize = getMaxColumnCountInTable(table);
+        StringBuilder resultRow = new StringBuilder();
+        List<String[]> tableWithZeros = new ArrayList<>();
+        for(String[] row : table){
+            for(int i = 0; i < maxColumnSize; i++){
+                if(i < row.length){
+                    resultRow.append(row[i]).append("\t");
+                }else{
+                    resultRow.append(0).append("\t");
+                }
+            }
+            tableWithZeros.add(resultRow.toString().split("\t"));
+            resultRow.delete(0, resultRow.length());
+        }
+        return tableWithZeros;
     }
 
     public List<String> findPatternInTable(List<String[]> table, String pattern){
