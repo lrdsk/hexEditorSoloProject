@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class SequenceHandler {
 
@@ -12,22 +13,15 @@ public class SequenceHandler {
             int itSeq = 0;
             int curIndexRow = rowIndex;
             int curIndexColumn = columnIndex;
-            int remainRows = table.size() - curIndexRow;
             String[] resultSeq = new String[lengthSeq];
 
-            while(remainRows > 0 && itSeq < lengthSeq){
-                if(curIndexColumn == 0) {
-                    curIndexColumn++;
-                }
-
+            while(curIndexRow < table.size() && itSeq < lengthSeq){
                 resultSeq[itSeq] = row[curIndexColumn];
-
                 itSeq++;
                 curIndexColumn++;
                 if(!(curIndexColumn < row.length)){
                     curIndexColumn = 0;
                     curIndexRow++;
-                    remainRows = table.size() - curIndexRow;
                     if(curIndexRow < table.size()){
                         row = table.get(curIndexRow);
                     }
@@ -141,16 +135,44 @@ public class SequenceHandler {
         return tableWithZeros;
     }
 
-    public List<String> findPatternInTable(List<String[]> table, String pattern){
+    public static List<String> findPatternInTable(List<String[]> table, String pattern){
         String[] strings = pattern.split(" ");
-        String[] stringsOverlap = new String[strings.length];
-        List<String[]> matches = new ArrayList<>();
+        int numberOfOverlap = 0;
         int curIndexColumn = 0;
-        int tableRowIterator = 0;
-        int numberOfStrings = 0;
+        int curIndexRow = 0;
+        String[] row = table.get(curIndexRow);
+        boolean isEquals = false;
 
-        while(curIndexColumn < table.get(tableRowIterator).length && numberOfStrings < strings.length){
-            if(strings[numberOfStrings] == table.get(tableRowIterator)[curIndexColumn]){
+        while(curIndexRow < table.size()){
+            numberOfOverlap = 0;
+            if(Objects.equals(row[curIndexColumn], strings[0])){
+                numberOfOverlap++;
+                for(int i = 1; i < strings.length; i++){
+                    curIndexColumn++;
+                    if(curIndexColumn >= row.length){
+                        curIndexColumn = 0;
+                        curIndexRow++;
+                        if(curIndexRow < table.size()){
+                            row = table.get(curIndexRow);
+                        }
+                    }
+                    if(Objects.equals(row[curIndexColumn], strings[i])){
+                        numberOfOverlap++;
+                    }
+                }
+            }
+
+            curIndexColumn++;
+            if(curIndexColumn >= row.length){
+                curIndexColumn = 0;
+                curIndexRow++;
+                if(curIndexRow < table.size()){
+                    row = table.get(curIndexRow);
+                }
+            }
+            if(numberOfOverlap == strings.length){
+                System.out.println("yes");
+                break;
             }
         }
         return new ArrayList<>();
