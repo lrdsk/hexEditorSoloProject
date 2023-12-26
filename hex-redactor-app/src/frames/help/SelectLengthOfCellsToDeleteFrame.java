@@ -1,24 +1,31 @@
 package frames.help;
 
 import models.ByteTableModel;
+import utils.SequenceHandler;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class SelectLengthOfCellsToDeleteFrame extends JFrame {
     private final ByteTableModel byteTableModel;
     private final JLabel labelLengthOfCells;
     private final JTextField textFieldLengthOfCells;
-    private final JButton buttonSelect;
+    private final JButton buttonDeleteWithZeros;
+    private final JButton buttonDeleteWithDataShift;
+    private final JTable jTable;
     private final int row;
     private final int column;
 
-    public SelectLengthOfCellsToDeleteFrame(ByteTableModel byteTableModel, int[] indexes) throws HeadlessException {
+    public SelectLengthOfCellsToDeleteFrame(JTable jTable, ByteTableModel byteTableModel, int[] indexes) throws HeadlessException {
         this.byteTableModel = byteTableModel;
+        this.jTable = jTable;
         this.labelLengthOfCells = new JLabel("Введите длину для удаления: ");
         this.textFieldLengthOfCells = new JTextField();
-        this.buttonSelect = new JButton("Выбрать");
+        this.buttonDeleteWithZeros = new JButton("C обнулением");
+        this.buttonDeleteWithDataShift = new JButton("Cо сдвигом");
         this.row = indexes[0];
         this.column = indexes[1];
         init();
@@ -31,11 +38,7 @@ public class SelectLengthOfCellsToDeleteFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new GridLayout(1,2));
-        panel.add(labelLengthOfCells);
-        panel.add(textFieldLengthOfCells);
-
-        buttonSelect.addActionListener(new ActionListener() {
+        buttonDeleteWithZeros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int length = Integer.parseInt(textFieldLengthOfCells.getText());
@@ -43,9 +46,30 @@ public class SelectLengthOfCellsToDeleteFrame extends JFrame {
                 dispose();
             }
         });
+        buttonDeleteWithDataShift.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int length = Integer.parseInt(textFieldLengthOfCells.getText());
+                List<String[]> dataCleared = byteTableModel.clearCellsWithShift(row,column,length);
 
-        add(panel, BorderLayout.CENTER);
-        add(buttonSelect, BorderLayout.SOUTH);
+                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataCleared));
+                byteTableModelInserted.addDate(dataCleared);
+
+                jTable.setModel(byteTableModelInserted);
+                dispose();
+            }
+        });
+
+        JPanel panelInputData = new JPanel(new GridLayout(1,2));
+        panelInputData.add(labelLengthOfCells);
+        panelInputData.add(textFieldLengthOfCells);
+
+        JPanel panelButtons = new JPanel(new GridLayout(1,2));
+        panelButtons.add(buttonDeleteWithZeros);
+        panelButtons.add(buttonDeleteWithDataShift);
+
+        add(panelInputData, BorderLayout.CENTER);
+        add(panelButtons, BorderLayout.SOUTH);
         pack();
     }
 }

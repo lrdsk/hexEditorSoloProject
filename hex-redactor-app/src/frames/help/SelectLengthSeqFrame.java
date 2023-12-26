@@ -34,21 +34,21 @@ public class SelectLengthSeqFrame extends JFrame {
         twoSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SequenceFrame(indexes,2, stringsArray).setVisible(true);
+                new SequenceFrame(indexes[0],indexes[1],2, stringsArray).setVisible(true);
                 dispose();
             }
         });
         fourSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SequenceFrame(indexes,4, stringsArray).setVisible(true);
+                new SequenceFrame(indexes[0],indexes[1],4, stringsArray).setVisible(true);
                 dispose();
             }
         });
         eightSizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SequenceFrame(indexes,8, stringsArray).setVisible(true);
+                new SequenceFrame(indexes[0],indexes[1],8, stringsArray).setVisible(true);
                 dispose();
 
             }

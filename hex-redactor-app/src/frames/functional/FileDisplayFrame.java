@@ -26,7 +26,7 @@ public class FileDisplayFrame extends JFrame {
     private final JButton buttonShowDecimal;
     private final JButton buttonShowLengthSeq;
     private final JButton buttonDeleteCell;
-    private final JButton buttonPasteCell;
+    private final JButton buttonInsertCell;
     private final JButton buttonCutCell;
     private final JButton buttonApplyChanges;
     private int previousRow = -1;
@@ -37,7 +37,7 @@ public class FileDisplayFrame extends JFrame {
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удаление");
-        this.buttonPasteCell = new JButton("Вставка");
+        this.buttonInsertCell = new JButton("Вставка");
         this.buttonCutCell = new JButton("Вырезать");
         this.buttonApplyChanges = new JButton("Apply");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
@@ -70,7 +70,9 @@ public class FileDisplayFrame extends JFrame {
         buttonShowLengthSeq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SelectLengthSeqFrame(stringsArray, getIndexesCellInTable()).setVisible(true);
+                int[] indexes = getIndexesCellInTable();
+                indexes[1] -= 1;
+                new SelectLengthSeqFrame(byteTableModel.getDate(), indexes).setVisible(true);
                 new SearchFrame(stringsArray).setVisible(true);
             }
         });
@@ -78,11 +80,10 @@ public class FileDisplayFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int[] indexes = getIndexesCellInTable();
-                new SelectLengthOfCellsToDeleteFrame((ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
-                System.out.println("row: " + indexes[0] + " column: " + indexes[1] + " value: " + byteTableModel.getValueAt(indexes[0], indexes[1]));
+                new SelectLengthOfCellsToDeleteFrame(byteTable, (ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
             }
         });
-        buttonPasteCell.addActionListener(new ActionListener() {
+        buttonInsertCell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new InsertSequenceIntoTableFrame(byteTable, byteTableModel, getIndexesCellInTable()).setVisible(true);
@@ -92,7 +93,7 @@ public class FileDisplayFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CustomFileWriter customFileWriter = new CustomFileWriter(
-                        new File("/home/user/java_tasks/hex-redactor/homework/test.txt").toPath()
+                        new File("/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/test.txt").toPath()
                 );
                 customFileWriter.writeTableDataToFile(byteTableModel.getDate());
             }
@@ -114,7 +115,7 @@ public class FileDisplayFrame extends JFrame {
         JPanel buttonsEditPanel = new JPanel();
         buttonsEditPanel.setLayout(new GridLayout(4,1));
         buttonsEditPanel.add(buttonDeleteCell);
-        buttonsEditPanel.add(buttonPasteCell);
+        buttonsEditPanel.add(buttonInsertCell);
         buttonsEditPanel.add(buttonCutCell);
         buttonsEditPanel.add(buttonApplyChanges);
 

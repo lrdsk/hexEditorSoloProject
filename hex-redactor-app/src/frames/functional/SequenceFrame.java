@@ -17,14 +17,16 @@ public class SequenceFrame extends JFrame {
     private final JButton buttonToDoubleDoublePrecision;
     private final int lengthSeq;
     private final List<String[]> stringsArray;
-    private final int[] indexes;
-    public SequenceFrame(int[] indexes, int lengthSeq, List<String[]> stringsArray) throws HeadlessException{
+    private final int rowIndex;
+    private final int columnIndex;
+    public SequenceFrame(int rowIndex, int columnIndex, int lengthSeq, List<String[]> stringsArray) throws HeadlessException{
         this.jLabelSeq = new JLabel();
         this.buttonToDecimalSigned = new JButton("10-ое со знаком");
         this.buttonToDecimalUnsigned = new JButton("10-ое без знака");
         this.buttonToDoubleSinglePrecision = new JButton("вещ-ое 1-ой точности");
         this.buttonToDoubleDoublePrecision = new JButton("вещ-ое 2-ой точности");
-        this.indexes = indexes;
+        this.rowIndex = rowIndex;
+        this.columnIndex = columnIndex;
         this.lengthSeq = lengthSeq;
         this.stringsArray = stringsArray;
         init();
@@ -36,7 +38,7 @@ public class SequenceFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        String[] hexSequence = SequenceHandler.getSequenceByIndex(indexes, lengthSeq, stringsArray);
+        String[] hexSequence = SequenceHandler.getSequenceByIndex(rowIndex, columnIndex, lengthSeq, stringsArray);
         jLabelSeq.setText(Arrays.toString(hexSequence));
 
         JPanel buttonPanel = new JPanel();

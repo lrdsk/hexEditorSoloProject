@@ -45,11 +45,10 @@ public class InsertSequenceIntoTableFrame extends JFrame{
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
 
-                List<String[]> dateInserted = byteTableModel.insertCells(row, column, cellsToInsert, false);
-                dateInserted = SequenceHandler.fillTableWithZeros(dateInserted);
+                List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, false);
 
-                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dateInserted));
-                byteTableModelInserted.addDate(dateInserted);
+                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
+                byteTableModelInserted.addDate(dataInserted);
 
                 jTable.setModel(byteTableModelInserted);
                 dispose();
@@ -61,12 +60,11 @@ public class InsertSequenceIntoTableFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
-                
-                List<String[]> dateInserted = byteTableModel.insertCells(row, column, cellsToInsert, true);
-                dateInserted = SequenceHandler.fillTableWithZeros(dateInserted);
 
-                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dateInserted));
-                byteTableModelInserted.addDate(dateInserted);
+                List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, true);
+
+                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
+                byteTableModelInserted.addDate(dataInserted);
 
                 jTable.setModel(byteTableModelInserted);
                 dispose();

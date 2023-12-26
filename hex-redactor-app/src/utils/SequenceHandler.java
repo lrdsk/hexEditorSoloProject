@@ -6,59 +6,83 @@ import java.util.List;
 
 public class SequenceHandler {
 
-    public static String[] getSequenceByIndex(int[] indexes, int lengthSeq, List<String[]> stringsArray){
-        String[] row = stringsArray.get(indexes[0]);
-        if(indexes[1] + lengthSeq > row.length){
+    public static String[] getSequenceByIndex(int rowIndex, int columnIndex, int lengthSeq, List<String[]> table){
+        String[] row = table.get(rowIndex);
+        if(columnIndex + lengthSeq > row.length){
             int itSeq = 0;
-            int curIndexRow = indexes[0];
-            int curIndexColumn = indexes[1];
-            int remainRows = stringsArray.size() - curIndexRow;
+            int curIndexRow = rowIndex;
+            int curIndexColumn = columnIndex;
+            int remainRows = table.size() - curIndexRow;
             String[] resultSeq = new String[lengthSeq];
 
             while(remainRows > 0 && itSeq < lengthSeq){
+                if(curIndexColumn == 0) {
+                    curIndexColumn++;
+                }
+
                 resultSeq[itSeq] = row[curIndexColumn];
+
                 itSeq++;
                 curIndexColumn++;
                 if(!(curIndexColumn < row.length)){
                     curIndexColumn = 0;
                     curIndexRow++;
-                    remainRows = stringsArray.size() - curIndexRow;
-                    if(curIndexRow < stringsArray.size()){
-                        row = stringsArray.get(curIndexRow);
+                    remainRows = table.size() - curIndexRow;
+                    if(curIndexRow < table.size()){
+                        row = table.get(curIndexRow);
                     }
                 }
             }
             return  resultSeq;
         }
-        return Arrays.copyOfRange(row, indexes[1], indexes[1]+lengthSeq);
+        return Arrays.copyOfRange(row, columnIndex, columnIndex + lengthSeq);
     }
 
-    public static void clearCells(int[] indexes, int lengthSeq, List<String[]> stringsArray){
-        String[] row = stringsArray.get(indexes[0]);
+    public static void clearCellsWithZeros(int rowIndex, int columnIndex, int lengthSeq, List<String[]> table){
+        String[] row = table.get(rowIndex);
 
         int itSeq = 0;
-        int curIndexRow = indexes[0];
-        int curIndexColumn = indexes[1];
-        int remainRows = stringsArray.size() - curIndexRow;
+        int curIndexRow = rowIndex;
+        int curIndexColumn = columnIndex;
+        int remainRows = table.size() - curIndexRow;
 
         while(remainRows > 0 && itSeq < lengthSeq){
-            row[curIndexColumn] = String.valueOf(0);
+            if(curIndexColumn != 0) {
+                row[curIndexColumn] = String.valueOf(0);
+            }
             itSeq++;
             curIndexColumn++;
             if(curIndexColumn >= row.length) {
                 curIndexColumn = 0;
                 curIndexRow++;
-                remainRows = stringsArray.size() - curIndexRow;
-                if (curIndexRow < stringsArray.size()) {
-                    row = stringsArray.get(curIndexRow);
+                remainRows = table.size() - curIndexRow;
+                if (curIndexRow < table.size()) {
+                    row = table.get(curIndexRow);
                 }
             }
         }
     }
 
+    public static List<String[]> clearCellsWithShift(int rowIndex, int columnIndex, int lengthSeq, List<String[]> table){
+        String[] row = table.get(rowIndex);
+        String[] mergedArray;
+        int newArrayLength = 0;
+
+        if(row.length - columnIndex >= lengthSeq){
+            newArrayLength = row.length - lengthSeq;
+        }
+        mergedArray = new String[newArrayLength];
+        System.arraycopy(row, 0, mergedArray, 0, columnIndex);
+        System.arraycopy(row, columnIndex + lengthSeq,
+                mergedArray, columnIndex, row.length - columnIndex - lengthSeq);
+        table.remove(rowIndex);
+        table.add(rowIndex, mergedArray);
+        System.out.println(Arrays.toString(mergedArray));
+        return table;
+    }
+
     public static String[] mergeRows(String[] currentRow, String[] insertedRow, int index){
         int newArrayLength = currentRow.length + insertedRow.length;
-
         String[] mergedArray = new String[newArrayLength];
 
         System.arraycopy(currentRow, 0, mergedArray, 0, index);

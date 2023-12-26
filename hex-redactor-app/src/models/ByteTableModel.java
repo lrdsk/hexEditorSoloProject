@@ -73,9 +73,17 @@ public class ByteTableModel extends AbstractTableModel {
 
     public void clearCells(int rowIndex, int columnIndex, int lengthSeq){
         if(columnIndex > 0) {
-            SequenceHandler.clearCells(new int[]{rowIndex,columnIndex}, lengthSeq, dataArrayList);
-            fireTableDataChanged();
+                SequenceHandler.clearCellsWithZeros(rowIndex, columnIndex, lengthSeq, dataArrayList);
+                fireTableDataChanged();
         }
+    }
+
+    public List<String[]> clearCellsWithShift(int rowIndex, int columnIndex, int lengthSeq){
+        if(columnIndex == 0)
+            columnIndex++;
+        List<String[]> dataCleared = SequenceHandler.clearCellsWithShift(rowIndex, columnIndex, lengthSeq, dataArrayList);
+        dataCleared = SequenceHandler.fillTableWithZeros(dataCleared);
+        return dataCleared;
     }
 
     public List<String[]> insertCells(int rowIndex, int columnIndex, String[] cells, boolean replacement){
@@ -92,6 +100,7 @@ public class ByteTableModel extends AbstractTableModel {
 
         dataArrayListInserted.remove(rowIndex);
         dataArrayListInserted.add(rowIndex, rowToInsert);
+        dataArrayListInserted = SequenceHandler.fillTableWithZeros(dataArrayListInserted);
 
         return dataArrayListInserted;
     }
