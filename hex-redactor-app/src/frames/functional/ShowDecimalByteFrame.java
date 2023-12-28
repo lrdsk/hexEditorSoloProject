@@ -7,9 +7,9 @@ import java.awt.event.ActionListener;
 
 public class ShowDecimalByteFrame extends JFrame {
     private final JLabel jLabel;
-    private String hexCell;
-    private JButton buttonToDecimalSigned;
-    private JButton buttonToDecimalUnsigned;
+    private final String hexCell;
+    private final JButton buttonToDecimalSigned;
+    private final JButton buttonToDecimalUnsigned;
 
     public ShowDecimalByteFrame(String hexCell) throws HeadlessException {
         this.hexCell = hexCell;

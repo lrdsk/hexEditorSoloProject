@@ -1,6 +1,6 @@
 package frames.functional;
 
-import frames.SearchFrame;
+import frames.help.CutSequenceFromTableFrame;
 import frames.help.InsertSequenceIntoTableFrame;
 import frames.help.SelectLengthOfCellsToDeleteFrame;
 import frames.help.SelectLengthSeqFrame;
@@ -28,7 +28,8 @@ public class FileDisplayFrame extends JFrame {
     private final JButton buttonDeleteCell;
     private final JButton buttonInsertCell;
     private final JButton buttonCutCell;
-    private final JButton buttonApplyChanges;
+    private final JButton buttonSaveChanges;
+    private final JButton buttonFindSeq;
     private int previousRow = -1;
     private int previousColumn = -1;
 
@@ -36,10 +37,11 @@ public class FileDisplayFrame extends JFrame {
     public FileDisplayFrame(CustomFileReader customFileReader) throws HeadlessException{
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
-        this.buttonDeleteCell = new JButton("Удаление");
-        this.buttonInsertCell = new JButton("Вставка");
+        this.buttonDeleteCell = new JButton("Удалить");
+        this.buttonInsertCell = new JButton("Вставить");
         this.buttonCutCell = new JButton("Вырезать");
-        this.buttonApplyChanges = new JButton("Apply");
+        this.buttonSaveChanges = new JButton("Сохранить");
+        this.buttonFindSeq = new JButton("Найти");
         this.stringsArray = customFileReader.readBytesFromFileToHex();
         this.byteTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(byteTableModel);
@@ -72,8 +74,7 @@ public class FileDisplayFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int[] indexes = getIndexesCellInTable();
                 indexes[1] -= 1;
-                new SelectLengthSeqFrame(byteTableModel.getDate(), indexes).setVisible(true);
-                new SearchFrame(stringsArray).setVisible(true);
+                new SelectLengthSeqFrame((ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
             }
         });
         buttonDeleteCell.addActionListener(new ActionListener() {
@@ -83,19 +84,33 @@ public class FileDisplayFrame extends JFrame {
                 new SelectLengthOfCellsToDeleteFrame(byteTable, (ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
             }
         });
+        buttonCutCell.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] indexes = getIndexesCellInTable();
+                indexes[1] -= 1;
+                new CutSequenceFromTableFrame(byteTable,(ByteTableModel) byteTable.getModel(), indexes).setVisible(true);
+            }
+        });
         buttonInsertCell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new InsertSequenceIntoTableFrame(byteTable, byteTableModel, getIndexesCellInTable()).setVisible(true);
             }
         });
-        buttonApplyChanges.addActionListener(new ActionListener() {
+        buttonSaveChanges.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CustomFileWriter customFileWriter = new CustomFileWriter(
-                        new File("/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/test.txt").toPath()
+                        new File("../hex-redactor-app/test.txt").toPath()
                 );
                 customFileWriter.writeTableDataToFile(byteTableModel.getDate());
+            }
+        });
+        buttonFindSeq.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SearchFrame(byteTableModel.getDate()).setVisible(true);
             }
         });
         byteTable.addMouseListener(new MouseAdapter() {
@@ -113,11 +128,12 @@ public class FileDisplayFrame extends JFrame {
         });
 
         JPanel buttonsEditPanel = new JPanel();
-        buttonsEditPanel.setLayout(new GridLayout(4,1));
+        buttonsEditPanel.setLayout(new GridLayout(5,1));
         buttonsEditPanel.add(buttonDeleteCell);
         buttonsEditPanel.add(buttonInsertCell);
         buttonsEditPanel.add(buttonCutCell);
-        buttonsEditPanel.add(buttonApplyChanges);
+        buttonsEditPanel.add(buttonFindSeq);
+        buttonsEditPanel.add(buttonSaveChanges);
 
         add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,

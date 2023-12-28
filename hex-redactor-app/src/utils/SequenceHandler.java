@@ -71,7 +71,6 @@ public class SequenceHandler {
                 mergedArray, columnIndex, row.length - columnIndex - lengthSeq);
         table.remove(rowIndex);
         table.add(rowIndex, mergedArray);
-        System.out.println(Arrays.toString(mergedArray));
         return table;
     }
 
@@ -135,28 +134,30 @@ public class SequenceHandler {
         return tableWithZeros;
     }
 
-    public static List<String> findPatternInTable(List<String[]> table, String pattern){
+    public static int[] findPatternInTable(List<String[]> table, String pattern){
         String[] strings = pattern.split(" ");
-        int numberOfOverlap = 0;
+        int[] indexes = new int[2];
         int curIndexColumn = 0;
         int curIndexRow = 0;
         String[] row = table.get(curIndexRow);
-        boolean isEquals = false;
 
         while(curIndexRow < table.size()){
-            numberOfOverlap = 0;
+            int numberOfOverlap = 0;
             if(Objects.equals(row[curIndexColumn], strings[0])){
+                indexes[0] = curIndexRow + 1;
+                indexes[1] = curIndexColumn + 1;
                 numberOfOverlap++;
+                int curIndexColumnInOverlap = curIndexColumn;
                 for(int i = 1; i < strings.length; i++){
-                    curIndexColumn++;
-                    if(curIndexColumn >= row.length){
-                        curIndexColumn = 0;
+                    curIndexColumnInOverlap++;
+                    if(curIndexColumnInOverlap >= row.length){
+                        curIndexColumnInOverlap = 0;
                         curIndexRow++;
                         if(curIndexRow < table.size()){
                             row = table.get(curIndexRow);
                         }
                     }
-                    if(Objects.equals(row[curIndexColumn], strings[i])){
+                    if(Objects.equals(row[curIndexColumnInOverlap], strings[i])){
                         numberOfOverlap++;
                     }
                 }
@@ -171,10 +172,10 @@ public class SequenceHandler {
                 }
             }
             if(numberOfOverlap == strings.length){
-                System.out.println("yes");
-                break;
+                System.out.println(indexes[0] + " " + indexes[1]);
+                return indexes;
             }
         }
-        return new ArrayList<>();
+        return new int[]{-1,-1};
     }
 }

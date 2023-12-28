@@ -39,7 +39,14 @@ public class SequenceFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         String[] hexSequence = SequenceHandler.getSequenceByIndex(rowIndex, columnIndex, lengthSeq, stringsArray);
-        jLabelSeq.setText(Arrays.toString(hexSequence));
+        StringBuilder stringSequence = new StringBuilder();
+        for(String s : hexSequence){
+            if(s != null){
+                stringSequence.append(s).append(" ");
+            }
+        }
+
+        jLabelSeq.setText(stringSequence.toString());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 4));

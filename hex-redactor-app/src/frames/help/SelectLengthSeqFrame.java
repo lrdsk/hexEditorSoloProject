@@ -1,6 +1,7 @@
 package frames.help;
 
 import frames.functional.SequenceFrame;
+import models.ByteTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,19 +10,21 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class SelectLengthSeqFrame extends JFrame {
-    private JButton twoSizeButton;
-    private JButton fourSizeButton;
-    private JButton eightSizeButton;
+    private final JButton twoSizeButton;
+    private final JButton fourSizeButton;
+    private final JButton eightSizeButton;
     private final JLabel jLabel;
-    private List<String[]> stringsArray;
-    private int[] indexes;
-    public SelectLengthSeqFrame(List<String[]> stringsArray, int[] indexes) throws HeadlessException{
+    private final List<String[]> stringsArray;
+    private final int[] indexes;
+    private final ByteTableModel byteTableModel;
+    public SelectLengthSeqFrame(ByteTableModel byteTableModel, int[] indexes) throws HeadlessException{
         this.indexes = indexes;
         this.twoSizeButton = new JButton("2");
         this.fourSizeButton = new JButton("4");
         this.eightSizeButton = new JButton("8");
         this.jLabel = new JLabel("Выберете длину для последовательности");
-        this.stringsArray = stringsArray;
+        this.byteTableModel = byteTableModel;
+        this.stringsArray = byteTableModel.getDate();
         init();
     }
 
