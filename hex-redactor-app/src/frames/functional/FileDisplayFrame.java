@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public class FileDisplayFrame extends JFrame {
@@ -30,11 +30,14 @@ public class FileDisplayFrame extends JFrame {
     private final JButton buttonCutCell;
     private final JButton buttonSaveChanges;
     private final JButton buttonFindSeq;
+    private final JButton buttonFileMenu;
     private int previousRow = -1;
     private int previousColumn = -1;
+    private final Path path;
+    private final FileChooser fileChooser;
 
 
-    public FileDisplayFrame(CustomFileReader customFileReader) throws HeadlessException{
+    public FileDisplayFrame(CustomFileReader customFileReader, FileChooser fileChooser) throws HeadlessException{
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удалить");
@@ -42,7 +45,10 @@ public class FileDisplayFrame extends JFrame {
         this.buttonCutCell = new JButton("Вырезать");
         this.buttonSaveChanges = new JButton("Сохранить");
         this.buttonFindSeq = new JButton("Найти");
+        this.buttonFileMenu = new JButton("Файл");
+        this.fileChooser = fileChooser;
         this.stringsArray = customFileReader.readBytesFromFileToHex();
+        this.path = customFileReader.getPath();
         this.byteTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
         this.byteTable = new JTable(byteTableModel);
         this.byteTableScrollPane = new JScrollPane(byteTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -98,12 +104,18 @@ public class FileDisplayFrame extends JFrame {
                 new InsertSequenceIntoTableFrame(byteTable, byteTableModel, getIndexesCellInTable()).setVisible(true);
             }
         });
+        buttonFileMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileChooser.setByteTableModel(byteTableModel);
+                fileChooser.setVisible(true);
+
+            }
+        });
         buttonSaveChanges.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CustomFileWriter customFileWriter = new CustomFileWriter(
-                        new File("../hex-redactor-app/test.txt").toPath()
-                );
+                CustomFileWriter customFileWriter = new CustomFileWriter(path);
                 customFileWriter.writeTableDataToFile(byteTableModel.getDate());
             }
         });
@@ -133,7 +145,7 @@ public class FileDisplayFrame extends JFrame {
         buttonsEditPanel.add(buttonInsertCell);
         buttonsEditPanel.add(buttonCutCell);
         buttonsEditPanel.add(buttonFindSeq);
-        buttonsEditPanel.add(buttonSaveChanges);
+        buttonsEditPanel.add(buttonFileMenu);
 
         add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,

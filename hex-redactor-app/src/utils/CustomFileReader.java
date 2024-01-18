@@ -83,4 +83,8 @@ public class CustomFileReader {
     public int getMaxColumnCount() {
         return maxColumnCount;
     }
+
+    public Path getPath() {
+        return path;
+    }
 }
