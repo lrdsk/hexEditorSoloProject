@@ -15,6 +15,7 @@ public class FileChooser extends JFrame {
     private final JButton buttonOpen;
     private final JButton buttonSave;
     private String path;
+    private FileDisplayFrame fileDisplayFrame;
     private ByteTableModel byteTableModel;
     public FileChooser() {
        this.buttonOpen = new JButton("Открыть");
@@ -42,6 +43,7 @@ public class FileChooser extends JFrame {
                     FileDisplayFrame mainForm = new FileDisplayFrame(customFileReader, getFileChooser());
                     mainForm.setVisible(true);
                     setVisible(false);
+                    fileDisplayFrame.dispose();
                 }
             }
         });
@@ -66,6 +68,9 @@ public class FileChooser extends JFrame {
 
     }
 
+    public void setCurrentFileDisplay(FileDisplayFrame fileDisplayFrame){
+        this.fileDisplayFrame = fileDisplayFrame;
+    }
     private Path converteStringPathToFilePath(String path){
         return new File(path).toPath();
     }

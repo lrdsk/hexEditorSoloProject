@@ -39,7 +39,11 @@ public class CustomFileWriter {
         for (String[] hexArray : hexList) {
             byte[] byteArray = new byte[hexArray.length];
             for (int i = 0; i < hexArray.length; i++) {
-                byteArray[i] = Byte.parseByte(hexArray[i], 16);
+                if(hexArray[i] != null) {
+                    byteArray[i] = Byte.parseByte(hexArray[i], 16);
+                }else{
+                    byteArray[i] = 0;
+                }
             }
 
             byteList.add(byteArray);

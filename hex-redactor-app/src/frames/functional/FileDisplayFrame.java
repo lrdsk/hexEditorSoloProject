@@ -109,7 +109,7 @@ public class FileDisplayFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 fileChooser.setByteTableModel(byteTableModel);
                 fileChooser.setVisible(true);
-
+                fileChooser.setCurrentFileDisplay(FileDisplayFrame.this);
             }
         });
         buttonSaveChanges.addActionListener(new ActionListener() {

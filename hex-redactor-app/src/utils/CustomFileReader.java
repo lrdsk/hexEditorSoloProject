@@ -1,13 +1,11 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomFileReader {
@@ -22,18 +20,21 @@ public class CustomFileReader {
     private int getMaxColumnFromFile(){
         int maxColumnCount = 0;
         if(Files.exists(path) && Files.isRegularFile(path)){
-            try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
+            System.out.println("file exists");
+            try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
                 String line;
-                while ((line = bufferedReader.readLine()) != null){
+                while ((line = file.readLine()) != null){
                     if(maxColumnCount < line.length() + 1){
                         maxColumnCount = line.length() + 1;
                     }
                 }
+                System.out.println("found maxColumnCount");
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         }
         return maxColumnCount;
     }
@@ -42,16 +43,27 @@ public class CustomFileReader {
         final List<String[]> hexRows = new ArrayList<>();
         maxColumnCount = getMaxColumnFromFile();
         if(Files.exists(path) && Files.isRegularFile(path)){
-            try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path.toFile()))) {
+            long currtime = System.nanoTime();
+            System.out.println("file exists");
+            try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
                 String line;
                 int i = 0;
-
-                while ((line = bufferedReader.readLine()) != null){
+                System.out.println("start reading");
+                while ((line = file.readLine()) != null){
                     byte[] bytes = line.getBytes(StandardCharsets.UTF_8);
                     hexRows.add(getBytesHexFormat(bytes, i));
                     i++;
-                }
+                   /* byte[] row = new byte[maxColumnCount];
 
+                    byte[] bytes = line.getBytes(StandardCharsets.UTF_8);
+                    System.arraycopy(bytes, 0, row, 0, bytes.length);
+                    hexRows.add(getBytesHexFormat(row, i));*/
+                    i++;
+                }
+                System.out.println("file is read");
+                long endTime = System.nanoTime();
+                long duration = (endTime - currtime) ;
+                System.out.println(duration);
                 return hexRows;
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
@@ -84,9 +96,10 @@ public class CustomFileReader {
                             .append("\t");
                 }
             }
-            while(hex.toString().split("\t").length < maxColumnCount){
-                hex.append(0).append("\t");
-            }
+        /*while(hex.toString().split("\t").length < maxColumnCount){
+            hex.append(0).append("\t");
+        }*/
+
 
         return hex.toString().split("\t");
     }
