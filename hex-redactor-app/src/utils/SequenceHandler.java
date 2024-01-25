@@ -43,8 +43,8 @@ public class SequenceHandler {
         while(remainRows > 0 && itSeq < lengthSeq){
             if(curIndexColumn != 0) {
                 row[curIndexColumn] = String.valueOf(0);
+                itSeq++;
             }
-            itSeq++;
             curIndexColumn++;
             if(curIndexColumn >= row.length) {
                 curIndexColumn = 0;
@@ -69,6 +69,9 @@ public class SequenceHandler {
         System.arraycopy(row, 0, mergedArray, 0, columnIndex);
         System.arraycopy(row, columnIndex + lengthSeq,
                 mergedArray, columnIndex, row.length - columnIndex - lengthSeq);
+        for(String s : mergedArray){
+            System.out.print(s + " ");
+        }
         table.remove(rowIndex);
         table.add(rowIndex, mergedArray);
         return table;

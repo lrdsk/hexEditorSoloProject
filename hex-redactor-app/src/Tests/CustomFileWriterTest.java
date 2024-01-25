@@ -24,7 +24,7 @@ public class CustomFileWriterTest {
     }
 
     @Test
-    public void testWriteTableDataToFile(@TempDir Path tempDir) throws IOException {
+    public void writeTableDataToFile_ShouldWriteCorrectDataInHexFormat(@TempDir Path tempDir) throws IOException {
         List<String[]> hexTable = generateTestData();
         Path filePath = tempDir.resolve("testFile.txt");
 

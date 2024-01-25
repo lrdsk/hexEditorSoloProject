@@ -28,8 +28,8 @@ public class CustomFileReaderTest {
     }
 
     @Test
-    public void testReadBytesFromFile() throws IOException {
-       /* CustomFileReader customFileReader = new CustomFileReader(tempFile);
+    public void readBytesFromFileToHex_ShouldReturnCorrectList() throws IOException {
+        CustomFileReader customFileReader = new CustomFileReader(tempFile);
         List<String[]> strings = customFileReader.readBytesFromFileToHex();
 
         assertEquals(1, strings.size());
@@ -40,11 +40,7 @@ public class CustomFileReaderTest {
         assertEquals("48", row[1]); // 'H' in hex
         assertEquals("65", row[2]); // 'e' in hex
         assertEquals("6C", row[3]);
-*/
-        CustomFileReader customFileReader1 = new CustomFileReader(Paths.get("/home/user/java_tasks/hex-redactor/homework/1.txt"));
-        List<String[]> strings1 = customFileReader1.readBytesFromFileToHex();
-        assertFalse(strings1.isEmpty());
-        System.out.println(strings1.size());
+
     }
 
     @AfterEach
