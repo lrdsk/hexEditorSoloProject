@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 public class FileChooser extends JFrame {
@@ -40,7 +41,12 @@ public class FileChooser extends JFrame {
                 }
                 if(path != null){
                     CustomFileReader customFileReader = new CustomFileReader(converteStringPathToFilePath(path));
-                    FileDisplayFrame mainForm = new FileDisplayFrame(customFileReader, getFileChooser());
+                    FileDisplayFrame mainForm = null;
+                    try {
+                        mainForm = new FileDisplayFrame(customFileReader, getFileChooser());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     mainForm.setVisible(true);
                     setVisible(false);
                     fileDisplayFrame.dispose();

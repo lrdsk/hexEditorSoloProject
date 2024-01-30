@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class FileDisplayFrame extends JFrame {
     private final FileChooser fileChooser;
 
 
-    public FileDisplayFrame(CustomFileReader customFileReader, FileChooser fileChooser) throws HeadlessException{
+    public FileDisplayFrame(CustomFileReader customFileReader, FileChooser fileChooser) throws HeadlessException, IOException {
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удалить");

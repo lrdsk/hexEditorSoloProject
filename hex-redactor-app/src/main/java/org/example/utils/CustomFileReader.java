@@ -19,18 +19,18 @@ public class CustomFileReader {
 
     private int getMaxColumnFromFile(){
         int maxColumnCount = 0;
-            try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
-                String line;
-                while ((line = file.readLine()) != null){
-                    if(maxColumnCount < line.getBytes().length + 1){
-                        maxColumnCount = line.getBytes().length + 1;
-                    }
+        try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
+            String line;
+            while ((line = file.readLine()) != null){
+                if(maxColumnCount < line.getBytes().length + 1){
+                    maxColumnCount = line.getBytes().length + 1;
                 }
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return maxColumnCount;
     }
 
@@ -66,24 +66,24 @@ public class CustomFileReader {
 
     private String[] getBytesHexFormat(byte[] byteRow, int i){
         final StringBuilder hex = new StringBuilder();
-            for(int j = 0; j < byteRow.length; j++){
-                byte currentByte = byteRow[j];
-                if (j == 0) {
-                    hex
-                            .append(i + 1)
-                            .append("\t");
-                }
-                if(currentByte != 48) {
-                    hex
-                            .append(HEXES.charAt((currentByte & 0xF0) >> 4))
-                            .append(HEXES.charAt((currentByte & 0x0F)))
-                            .append("\t");
-                }else{
-                    hex
-                            .append(0)
-                            .append("\t");
-                }
+        for(int j = 0; j < byteRow.length; j++){
+            byte currentByte = byteRow[j];
+            if (j == 0) {
+                hex
+                        .append(i + 1)
+                        .append("\t");
             }
+            if(currentByte != 48) {
+                hex
+                        .append(HEXES.charAt((currentByte & 0xF0) >> 4))
+                        .append(HEXES.charAt((currentByte & 0x0F)))
+                        .append("\t");
+            }else{
+                hex
+                        .append(0)
+                        .append("\t");
+            }
+        }
 
         return hex.toString().split("\t");
     }
