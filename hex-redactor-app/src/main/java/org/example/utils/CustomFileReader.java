@@ -17,7 +17,7 @@ public class CustomFileReader {
         this.path = path;
     }
 
-    private int getMaxColumnFromFile(){
+    /*private int getMaxColumnFromFile(){
         int maxColumnCount = 0;
         try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
             String line;
@@ -32,32 +32,25 @@ public class CustomFileReader {
             throw new RuntimeException(e);
         }
         return maxColumnCount;
-    }
+    }*/
 
     public List<String[]> readBytesFromFileToHex(){
         final List<String[]> hexRows = new ArrayList<>();
         if(Files.exists(path) && Files.isRegularFile(path)){
-            maxColumnCount = getMaxColumnFromFile();
-            try(RandomAccessFile file = new RandomAccessFile(path.toFile(), "r")) {
-                String line;
+            int chunkSize = 256;
+            maxColumnCount = chunkSize;
+            try (FileInputStream fileInputStream = new FileInputStream(path.toFile())) {
+                byte[] buffer = new byte[chunkSize];
                 int i = 0;
-                while ((line = file.readLine()) != null){
-                    byte[] bytes = line.getBytes(StandardCharsets.UTF_8);
-
-                    String[] str = new String[maxColumnCount];
-                    String[] strRow = getBytesHexFormat(bytes, i);
-
-                    Arrays.fill(str, "0");
-                    System.arraycopy(strRow, 0, str, 0, strRow.length);
-
+                while ((fileInputStream.read(buffer)) != -1) {
+                    String[] str = getBytesHexFormat(buffer, i);
                     hexRows.add(str);
                     i++;
+                    buffer = new byte[chunkSize];
                 }
                 return hexRows;
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 

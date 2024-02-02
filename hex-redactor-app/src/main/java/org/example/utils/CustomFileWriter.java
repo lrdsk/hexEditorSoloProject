@@ -16,7 +16,7 @@ public class CustomFileWriter {
     public void writeTableDataToFile(List<String[]> hexTable){
         try (
                 BufferedWriter bufferedWriter = new BufferedWriter(
-                new OutputStreamWriter(Files.newOutputStream(path.toFile().toPath()), StandardCharsets.UTF_8))
+                        new OutputStreamWriter(Files.newOutputStream(path), StandardCharsets.UTF_8))
         ){
             List<byte[]> byteList = convertToBytes(hexTable);
             List<String[]> dataStringList = convertToString(byteList);
@@ -25,7 +25,6 @@ public class CustomFileWriter {
                 for(String s : line){
                     bufferedWriter.write(s);
                 }
-                bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
         } catch (IOException e) {
@@ -60,7 +59,7 @@ public class CustomFileWriter {
                 if(!(byteArray[i] == 0)){
                     row[i] = String.valueOf((char) byteArray[i]);
                 }else {
-                    row[i] = "0";
+                    row[i] = "";
                 }
             }
             charList.add(row);

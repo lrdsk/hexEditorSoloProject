@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +34,10 @@ public class CustomFileReaderTest {
 
         assertEquals(1, strings.size());
         String[] row = strings.get(0);
+
+        for(String[] str : strings){
+            System.out.println(Arrays.toString(str));
+        }
 
         assertEquals(content.length() + 1, row.length); // +1 for line number column
         assertEquals("1", row[0]); // line number
