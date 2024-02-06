@@ -5,8 +5,10 @@ import org.example.frames.help.InsertSequenceIntoTableFrame;
 import org.example.frames.help.SelectLengthOfCellsToDeleteFrame;
 import org.example.frames.help.SelectLengthSeqFrame;
 import org.example.models.ByteTableModel;
+import org.example.utils.CustomFilePageReader;
 import org.example.utils.CustomFileReader;
 import org.example.utils.CustomFileWriter;
+import org.example.utils.CustomPageFileWriter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,7 +22,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class FileDisplayFrame extends JFrame {
-    private final List<String[]> stringsArray;
+    private List<String[]> stringsArray;
     private final ByteTableModel byteTableModel;
     private final JTable byteTable;
     private final JScrollPane byteTableScrollPane;
@@ -32,13 +34,16 @@ public class FileDisplayFrame extends JFrame {
     private final JButton buttonSaveChanges;
     private final JButton buttonFindSeq;
     private final JButton buttonFileMenu;
+    private final JButton buttonNextPage;
+    private final JButton buttonPreviousPage;
     private int previousRow = -1;
     private int previousColumn = -1;
     private final Path path;
     private final FileChooser fileChooser;
+    private int readPages;
 
 
-    public FileDisplayFrame(CustomFileReader customFileReader, FileChooser fileChooser) throws HeadlessException, IOException {
+    public FileDisplayFrame(CustomFilePageReader customFilePageReader, FileChooser fileChooser) throws HeadlessException, IOException {
         this.buttonShowDecimal = new JButton("Десятичное представление");
         this.buttonShowLengthSeq = new JButton("Последователность");
         this.buttonDeleteCell = new JButton("Удалить");
@@ -47,10 +52,13 @@ public class FileDisplayFrame extends JFrame {
         this.buttonSaveChanges = new JButton("Сохранить");
         this.buttonFindSeq = new JButton("Найти");
         this.buttonFileMenu = new JButton("Файл");
+        this.buttonNextPage = new JButton("->");
+        this.buttonPreviousPage = new JButton("<-");
         this.fileChooser = fileChooser;
-        this.stringsArray = customFileReader.readBytesFromFileToHex();
-        this.path = customFileReader.getPath();
-        this.byteTableModel = new ByteTableModel(customFileReader.getMaxColumnCount());
+        this.stringsArray = customFilePageReader.readBytesToTableModel(100);
+        this.readPages = customFilePageReader.getReadPages();
+        this.path = customFilePageReader.getPath();
+        this.byteTableModel = new ByteTableModel(customFilePageReader.getPageSize());
         this.byteTable = new JTable(byteTableModel);
         this.byteTableScrollPane = new JScrollPane(byteTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -116,14 +124,54 @@ public class FileDisplayFrame extends JFrame {
         buttonSaveChanges.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CustomFileWriter customFileWriter = new CustomFileWriter(path);
-                customFileWriter.writeTableDataToFile(byteTableModel.getDate());
+                try(CustomPageFileWriter customPageFileWriter = new CustomPageFileWriter(path, 256, readPages)){
+                    customPageFileWriter.writeTableDataToFile(byteTableModel.getDate());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                /*CustomFileWriter customFileWriter = new CustomFileWriter(path);
+                customFileWriter.writeTableDataToFile(byteTableModel.getDate());*/
             }
         });
         buttonFindSeq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new SearchFrame(byteTableModel.getDate()).setVisible(true);
+            }
+        });
+        buttonNextPage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try(CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages)) {
+                    if(readPages < customPageFileReader.getPageCount()) {
+                        stringsArray = customPageFileReader.readBytesToTableModel(100);
+                        readPages += customPageFileReader.getReadPages();
+                        ByteTableModel newPageModel = new ByteTableModel(256);
+                        newPageModel.addDate(stringsArray);
+
+                        byteTable.setModel(newPageModel);
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        buttonPreviousPage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (readPages - 100 > 0) {
+                    readPages -= 100;
+                    try (CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages - 100)) {
+                        stringsArray = customPageFileReader.readBytesToTableModel(100);
+
+                        ByteTableModel newPageModel = new ByteTableModel(256);
+                        newPageModel.addDate(stringsArray);
+
+                        byteTable.setModel(newPageModel);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
             }
         });
         byteTable.addMouseListener(new MouseAdapter() {
@@ -141,12 +189,14 @@ public class FileDisplayFrame extends JFrame {
         });
 
         JPanel buttonsEditPanel = new JPanel();
-        buttonsEditPanel.setLayout(new GridLayout(5,1));
+        buttonsEditPanel.setLayout(new GridLayout(7,1));
         buttonsEditPanel.add(buttonDeleteCell);
         buttonsEditPanel.add(buttonInsertCell);
         buttonsEditPanel.add(buttonCutCell);
         buttonsEditPanel.add(buttonFindSeq);
         buttonsEditPanel.add(buttonFileMenu);
+        buttonsEditPanel.add(buttonNextPage);
+        buttonsEditPanel.add(buttonPreviousPage);
 
         add(byteTableScrollPane, new GridBagConstraints(0,0,1,1,1,1,
                 GridBagConstraints.NORTH,GridBagConstraints.BOTH,

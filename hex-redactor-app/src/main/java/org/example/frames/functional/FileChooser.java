@@ -1,8 +1,10 @@
 package org.example.frames.functional;
 
 import org.example.models.ByteTableModel;
+import org.example.utils.CustomFilePageReader;
 import org.example.utils.CustomFileReader;
 import org.example.utils.CustomFileWriter;
+import org.example.utils.CustomPageFileWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,8 @@ public class FileChooser extends JFrame {
     private String path;
     private FileDisplayFrame fileDisplayFrame;
     private ByteTableModel byteTableModel;
-    public FileChooser() {
+    private int currentPage;
+    public FileChooser(int currentPage) {
        this.buttonOpen = new JButton("Открыть");
        this.buttonSave = new JButton("Сохранить");
        init();
@@ -40,16 +43,18 @@ public class FileChooser extends JFrame {
                     path = selectedFile.getAbsolutePath();
                 }
                 if(path != null){
-                    CustomFileReader customFileReader = new CustomFileReader(converteStringPathToFilePath(path));
-                    FileDisplayFrame mainForm = null;
-                    try {
-                        mainForm = new FileDisplayFrame(customFileReader, getFileChooser());
+                    try(CustomFilePageReader customFilePageReader =
+                                new CustomFilePageReader(converteStringPathToFilePath(path), 256, currentPage)){
+
+                        FileDisplayFrame mainForm = new FileDisplayFrame(customFilePageReader, getFileChooser());
+                        mainForm.setVisible(true);
+                        setVisible(false);
+                        fileDisplayFrame.dispose();
+
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    mainForm.setVisible(true);
-                    setVisible(false);
-                    fileDisplayFrame.dispose();
+
                 }
             }
         });
@@ -58,10 +63,14 @@ public class FileChooser extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(path != null){
-                    CustomFileWriter customFileWriter = new CustomFileWriter(converteStringPathToFilePath(path));
-                    if(byteTableModel.getDate() != null) {
-                        customFileWriter.writeTableDataToFile(byteTableModel.getDate());
-                        setVisible(false);
+                    try (CustomPageFileWriter customPageFileWriter =
+                                 new CustomPageFileWriter(converteStringPathToFilePath(path),256, currentPage)){
+                        if(byteTableModel.getDate() != null) {
+                            customPageFileWriter.writeTableDataToFile(byteTableModel.getDate());
+                            setVisible(false);
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             }
@@ -85,5 +94,9 @@ public class FileChooser extends JFrame {
     }
     private FileChooser getFileChooser(){
         return this;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 }
