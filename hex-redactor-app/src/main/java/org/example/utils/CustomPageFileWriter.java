@@ -28,7 +28,13 @@ public class CustomPageFileWriter implements AutoCloseable {
     private void writeData(byte[] data) throws IOException {
         ram.seek((long) currentPage * pageSize);
         ram.write(data);
+        setPage(currentPage + 1);
     }
+
+    private void setPage(int pageNumber) {
+        this.currentPage = pageNumber;
+    }
+
     public void writeTableDataToFile(List<String[]> hexTable) throws IOException {
         List<byte[]> bytes = convertToBytes(hexTable);
 

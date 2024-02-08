@@ -116,27 +116,18 @@ public class FileDisplayFrame extends JFrame {
         buttonFileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setByteTableModel(byteTableModel);
+                ByteTableModel curTableModel = (ByteTableModel) byteTable.getModel();
+                fileChooser.setByteTableModel(curTableModel);
                 fileChooser.setVisible(true);
                 fileChooser.setCurrentFileDisplay(FileDisplayFrame.this);
-            }
-        });
-        buttonSaveChanges.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try(CustomPageFileWriter customPageFileWriter = new CustomPageFileWriter(path, 256, readPages)){
-                    customPageFileWriter.writeTableDataToFile(byteTableModel.getDate());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                /*CustomFileWriter customFileWriter = new CustomFileWriter(path);
-                customFileWriter.writeTableDataToFile(byteTableModel.getDate());*/
             }
         });
         buttonFindSeq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new SearchFrame(byteTableModel.getDate()).setVisible(true);
+                ByteTableModel b = (ByteTableModel) byteTable.getModel();
+                List<String[]> s = b.getDate();
             }
         });
         buttonNextPage.addActionListener(new ActionListener() {
@@ -144,10 +135,9 @@ public class FileDisplayFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try(CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages)) {
                     if(readPages < customPageFileReader.getPageCount()) {
-                        stringsArray = customPageFileReader.readBytesToTableModel(100);
-                        readPages += customPageFileReader.getReadPages();
                         ByteTableModel newPageModel = new ByteTableModel(256);
-                        newPageModel.addDate(stringsArray);
+                        newPageModel.addDate(customPageFileReader.readBytesToTableModel(100));
+                        readPages += customPageFileReader.getReadPages();
 
                         byteTable.setModel(newPageModel);
                     }

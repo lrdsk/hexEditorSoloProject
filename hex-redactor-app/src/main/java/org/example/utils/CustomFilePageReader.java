@@ -35,7 +35,6 @@ public class CustomFilePageReader implements AutoCloseable {
 
         if(Files.exists(file) && Files.isRegularFile(file)) {
             this.ram = new RandomAccessFile(file.toAbsolutePath().toFile(), "r");
-
             readPage();
         }
     }

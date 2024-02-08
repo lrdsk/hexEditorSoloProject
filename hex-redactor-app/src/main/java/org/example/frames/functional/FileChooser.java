@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileChooser extends JFrame {
     private final JButton buttonOpen;
@@ -21,13 +23,15 @@ public class FileChooser extends JFrame {
     private FileDisplayFrame fileDisplayFrame;
     private ByteTableModel byteTableModel;
     private int currentPage;
+
     public FileChooser(int currentPage) {
-       this.buttonOpen = new JButton("Открыть");
-       this.buttonSave = new JButton("Сохранить");
-       init();
+        this.currentPage = currentPage;
+        this.buttonOpen = new JButton("Открыть");
+        this.buttonSave = new JButton("Сохранить");
+        init();
     }
 
-    public void init(){
+    public void init() {
         setTitle("Файл");
         setSize(300, 200);
         setLocationRelativeTo(null);
@@ -42,9 +46,9 @@ public class FileChooser extends JFrame {
                     File selectedFile = fileChooser.getSelectedFile();
                     path = selectedFile.getAbsolutePath();
                 }
-                if(path != null){
-                    try(CustomFilePageReader customFilePageReader =
-                                new CustomFilePageReader(converteStringPathToFilePath(path), 256, currentPage)){
+                if (path != null) {
+                    try (CustomFilePageReader customFilePageReader =
+                                 new CustomFilePageReader(converteStringPathToFilePath(path), 256, currentPage)) {
 
                         FileDisplayFrame mainForm = new FileDisplayFrame(customFilePageReader, getFileChooser());
                         mainForm.setVisible(true);
@@ -62,10 +66,12 @@ public class FileChooser extends JFrame {
         buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(path != null){
+                if (path != null) {
                     try (CustomPageFileWriter customPageFileWriter =
-                                 new CustomPageFileWriter(converteStringPathToFilePath(path),256, currentPage)){
-                        if(byteTableModel.getDate() != null) {
+                                 new CustomPageFileWriter(converteStringPathToFilePath(path), 256, currentPage)) {
+                        if (byteTableModel.getDate() != null) {
+                            List<String[]> s = byteTableModel.getDate();
+                            System.out.println(Arrays.toString(s.get(0)));
                             customPageFileWriter.writeTableDataToFile(byteTableModel.getDate());
                             setVisible(false);
                         }
@@ -76,23 +82,26 @@ public class FileChooser extends JFrame {
             }
         });
 
-        JPanel panelButtons = new JPanel(new GridLayout(2,1));
+        JPanel panelButtons = new JPanel(new GridLayout(2, 1));
         panelButtons.add(buttonOpen);
         panelButtons.add(buttonSave);
         add(panelButtons);
 
     }
 
-    public void setCurrentFileDisplay(FileDisplayFrame fileDisplayFrame){
+    public void setCurrentFileDisplay(FileDisplayFrame fileDisplayFrame) {
         this.fileDisplayFrame = fileDisplayFrame;
     }
-    private Path converteStringPathToFilePath(String path){
+
+    private Path converteStringPathToFilePath(String path) {
         return new File(path).toPath();
     }
-    public void setByteTableModel(ByteTableModel byteTableModel){
+
+    public void setByteTableModel(ByteTableModel byteTableModel) {
         this.byteTableModel = byteTableModel;
     }
-    private FileChooser getFileChooser(){
+
+    private FileChooser getFileChooser() {
         return this;
     }
 
