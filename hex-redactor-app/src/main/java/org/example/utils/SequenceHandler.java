@@ -69,9 +69,7 @@ public class SequenceHandler {
         System.arraycopy(row, 0, mergedArray, 0, columnIndex);
         System.arraycopy(row, columnIndex + lengthSeq,
                 mergedArray, columnIndex, row.length - columnIndex - lengthSeq);
-        for(String s : mergedArray){
-            System.out.print(s + " ");
-        }
+
         table.remove(rowIndex);
         table.add(rowIndex, mergedArray);
         return table;
@@ -176,7 +174,6 @@ public class SequenceHandler {
                 }
             }
             if(numberOfOverlap == strings.length){
-                System.out.println(indexes[0] + " " + indexes[1]);
                 listIndexes.add(indexes);
                 indexes = new int[2];
             }

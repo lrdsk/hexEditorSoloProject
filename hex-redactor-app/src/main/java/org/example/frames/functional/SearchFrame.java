@@ -63,7 +63,6 @@ public class SearchFrame extends JFrame {
                 }
                 dispose();
 
-                System.out.println(foundIndexes.size());
                 new ShowFindIndexesFrame(foundIndexes, indexPages, fileDisplayFrame).setVisible(true);
 
             }
