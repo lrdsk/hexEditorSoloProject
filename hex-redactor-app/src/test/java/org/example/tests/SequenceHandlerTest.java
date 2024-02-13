@@ -127,10 +127,9 @@ public class SequenceHandlerTest {
     @Test
     void findPatternInTable_ShouldReturnIndexes() {
         String pattern = "G H I";
-        int[] expected = {2, 3};
-        int[] result = SequenceHandler.findPatternInTable(table, pattern);
-
-        assertArrayEquals(expected, result);
+        int[] expected = {1, 2};
+        List<int[]> result = SequenceHandler.findPatternInTable(table, pattern);
+        assertArrayEquals(expected, result.get(0));
     }
 
 }

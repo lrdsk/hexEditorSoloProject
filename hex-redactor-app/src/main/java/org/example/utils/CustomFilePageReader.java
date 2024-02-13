@@ -39,14 +39,14 @@ public class CustomFilePageReader implements AutoCloseable {
         }
     }
 
-    public void nextPage() throws IOException {
+    private void nextPage() throws IOException {
         if (currentPage != getPageCount()) {
             currentPage++;
             readPage();
         }
     }
 
-    public void previousPage() throws IOException {
+    private void previousPage() throws IOException {
         if (currentPage == 0) {
             throw new IllegalStateException("File start reached");
         }

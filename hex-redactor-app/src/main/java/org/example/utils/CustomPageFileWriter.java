@@ -86,4 +86,8 @@ public class CustomPageFileWriter implements AutoCloseable {
     public void close() throws IOException {
         ram.close();
     }
+
+    public Path getPath() {
+        return path;
+    }
 }

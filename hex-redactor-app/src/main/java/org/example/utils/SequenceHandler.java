@@ -137,8 +137,9 @@ public class SequenceHandler {
         return tableWithZeros;
     }
 
-    public static int[] findPatternInTable(List<String[]> table, String pattern){
+    public static List<int[]> findPatternInTable(List<String[]> table, String pattern){
         String[] strings = pattern.split(" ");
+        List<int[]> listIndexes = new ArrayList<>();
         int[] indexes = new int[2];
         int curIndexColumn = 0;
         int curIndexRow = 0;
@@ -147,8 +148,8 @@ public class SequenceHandler {
         while(curIndexRow < table.size()){
             int numberOfOverlap = 0;
             if(Objects.equals(row[curIndexColumn], strings[0])){
-                indexes[0] = curIndexRow + 1;
-                indexes[1] = curIndexColumn + 1;
+                indexes[0] = curIndexRow;
+                indexes[1] = curIndexColumn;
                 numberOfOverlap++;
                 int curIndexColumnInOverlap = curIndexColumn;
                 for(int i = 1; i < strings.length; i++){
@@ -176,9 +177,10 @@ public class SequenceHandler {
             }
             if(numberOfOverlap == strings.length){
                 System.out.println(indexes[0] + " " + indexes[1]);
-                return indexes;
+                listIndexes.add(indexes);
+                indexes = new int[2];
             }
         }
-        return new int[]{-1,-1};
+        return listIndexes;
     }
 }

@@ -2,10 +2,7 @@ package org.example.frames.functional;
 
 import org.example.models.ByteTableModel;
 import org.example.utils.CustomFilePageReader;
-import org.example.utils.CustomFileReader;
-import org.example.utils.CustomFileWriter;
 import org.example.utils.CustomPageFileWriter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,8 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 
 public class FileChooser extends JFrame {
     private final JButton buttonOpen;
@@ -49,7 +44,6 @@ public class FileChooser extends JFrame {
                 if (path != null) {
                     try (CustomFilePageReader customFilePageReader =
                                  new CustomFilePageReader(converteStringPathToFilePath(path), 256, currentPage)) {
-
                         FileDisplayFrame mainForm = new FileDisplayFrame(customFilePageReader, getFileChooser());
                         mainForm.setVisible(true);
                         setVisible(false);
@@ -70,8 +64,6 @@ public class FileChooser extends JFrame {
                     try (CustomPageFileWriter customPageFileWriter =
                                  new CustomPageFileWriter(converteStringPathToFilePath(path), 256, currentPage)) {
                         if (byteTableModel.getDate() != null) {
-                            List<String[]> s = byteTableModel.getDate();
-                            System.out.println(Arrays.toString(s.get(0)));
                             customPageFileWriter.writeTableDataToFile(byteTableModel.getDate());
                             setVisible(false);
                         }
