@@ -34,11 +34,11 @@ public class ShowFindIndexesFrame extends JFrame {
 
         StringBuilder text = new StringBuilder();
         if(!foundIndexes.isEmpty()) {
-                text
-                        .append("Введенная вами последовательность для поиска находится в ячейке: ")
-                        .append(foundIndexes.get(iteratorFoundIndexes)[0] + 1)
-                        .append(" ")
-                        .append(foundIndexes.get(iteratorFoundIndexes)[1]);
+            text
+                    .append("Введенная вами последовательность для поиска находится в ячейке: ")
+                    .append(foundIndexes.get(iteratorFoundIndexes)[0] + 1)
+                    .append(" ")
+                    .append(foundIndexes.get(iteratorFoundIndexes)[1]);
         }else{
             text.append("Введенная вами последовательность для поиска не найдена.");
         }

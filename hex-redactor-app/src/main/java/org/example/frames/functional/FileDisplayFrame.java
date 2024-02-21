@@ -141,7 +141,7 @@ public class FileDisplayFrame extends JFrame {
         buttonNextPage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    setNextPage(readPages);
+                setNextPage(readPages);
             }
         });
         buttonPreviousPage.addActionListener(new ActionListener() {
