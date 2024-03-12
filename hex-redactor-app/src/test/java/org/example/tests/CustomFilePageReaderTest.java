@@ -70,8 +70,12 @@ class CustomFilePageReaderTest {
 
     @Test
     void getPath() {
-        Path path = customFilePageReader.getPath();
-        assertNotNull(path);
-        assertTrue(Files.exists(path));
+        try(CustomFilePageReader customFilePageReader = new CustomFilePageReader(file, pageSize, 0)) {
+            Path path = customFilePageReader.getPath();
+            assertNotNull(path);
+            assertTrue(Files.exists(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

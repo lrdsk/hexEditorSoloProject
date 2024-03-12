@@ -22,7 +22,6 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
     private final JLabel jLabel;
     private final FileDisplayFrame fileDisplayFrame;
     private int iteratorFoundIndexes = 0;
-    private int clickCount;
     private final Path path;
     private int readPages = 0;
     private final ShowFindIndexesFrame showFindIndexesFrame = this;
@@ -50,7 +49,6 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
 
         SequenceHandler sequenceHandler = new SequenceHandler();
 
-        // Создаем ExecutorService с одним потоком
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.submit(() -> {
@@ -70,7 +68,6 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
             onTaskComplete(true);
         });
 
-// Не забудьте завершить ExecutorService после завершения работы
         executor.shutdown();
 
         StringBuilder text = new StringBuilder();
@@ -82,8 +79,6 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
         buttonNext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickCount++;
-
                 if(iteratorFoundIndexes >= listIndexes.size() && taskComplete){
                        text
                                .delete(0, text.toString().length())
@@ -115,6 +110,7 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
                 dispose();
             }
         });
+
         jLabel.setText(text.toString());
         JPanel panel = new JPanel(new GridLayout(1, 2));
         panel.add(buttonNext);
