@@ -113,6 +113,8 @@ public class CustomFilePageReader implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
-        ram.close();
+        if(ram != null) {
+            ram.close();
+        }
     }
 }

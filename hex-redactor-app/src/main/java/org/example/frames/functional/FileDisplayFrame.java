@@ -121,7 +121,7 @@ public class FileDisplayFrame extends JFrame {
 
                 if (readPages >= 100) {
                     fileChooser.setCurrentPage(readPages - 100);
-                }else if(readPages > 0){
+                } else if (readPages > 0) {
                     fileChooser.setCurrentPage(0);
                 } else {
                     fileChooser.setCurrentPage(readPages);
@@ -149,7 +149,7 @@ public class FileDisplayFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (readPages - 100 > 0) {
                     readPages -= 100;
-                }else{
+                } else {
                     readPages = 0;
                 }
                 setPreviousPage(readPages);
@@ -227,8 +227,23 @@ public class FileDisplayFrame extends JFrame {
             throw new RuntimeException(e);
         }
     }
-    public void setPreviousPage(int readPages){
-        if(readPages - 100 < 0){
+
+    public void setCurrentPage(int readPages) {
+        try (CustomFilePageReader customFilePageReader = new CustomFilePageReader(path, 256, readPages)) {
+            if (readPages < customFilePageReader.getPageCount()) {
+                ByteTableModel newPageModel = new ByteTableModel(256);
+                newPageModel.addDate(customFilePageReader.readBytesToTableModel(100));
+                byteTable.setModel(newPageModel);
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void setPreviousPage(int readPages) {
+        if (readPages - 100 < 0) {
             readPages = 100;
         }
         try (CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages - 100)) {
@@ -242,29 +257,30 @@ public class FileDisplayFrame extends JFrame {
             throw new RuntimeException(ex);
         }
     }
-        public String getValueInCell () {
-            int[] indexes = getIndexesCellInTable();
-            Object selectedValue = null;
-            if (indexes[0] != -1 && indexes[1] != -1) {
-                selectedValue = byteTable.getValueAt(indexes[0], indexes[1]);
-            }
-            return (String) selectedValue;
+
+    public String getValueInCell() {
+        int[] indexes = getIndexesCellInTable();
+        Object selectedValue = null;
+        if (indexes[0] != -1 && indexes[1] != -1) {
+            selectedValue = byteTable.getValueAt(indexes[0], indexes[1]);
+        }
+        return (String) selectedValue;
+    }
+
+private class ColorfulTableCellRenderer extends DefaultTableCellRenderer {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        if (row == previousRow && column == previousColumn) {
+            // Изменение цвета выбранной ячейки
+            c.setBackground(Color.BLUE);
+        } else {
+            // Возврат ячейки в исходное состояние
+            c.setBackground(table.getBackground());
         }
 
-        private class ColorfulTableCellRenderer extends DefaultTableCellRenderer {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (row == previousRow && column == previousColumn) {
-                    // Изменение цвета выбранной ячейки
-                    c.setBackground(Color.BLUE);
-                } else {
-                    // Возврат ячейки в исходное состояние
-                    c.setBackground(table.getBackground());
-                }
-
-                return c;
-            }
-        }
+        return c;
+    }
+}
     }
