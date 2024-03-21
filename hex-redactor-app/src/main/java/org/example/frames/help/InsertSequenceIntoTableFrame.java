@@ -45,12 +45,16 @@ public class InsertSequenceIntoTableFrame extends JFrame{
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
 
+                try{
                 List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, false);
 
                 ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
                 byteTableModelInserted.addDate(dataInserted);
 
                 jTable.setModel(byteTableModelInserted);
+                }catch(IndexOutOfBoundsException ex){
+                    System.out.println(ex.getMessage());
+                }
                 dispose();
             }
         });
@@ -60,13 +64,16 @@ public class InsertSequenceIntoTableFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
+                try {
+                    List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, true);
 
-                List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, true);
+                    ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
+                    byteTableModelInserted.addDate(dataInserted);
 
-                ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
-                byteTableModelInserted.addDate(dataInserted);
-
-                jTable.setModel(byteTableModelInserted);
+                    jTable.setModel(byteTableModelInserted);
+                }catch(IndexOutOfBoundsException ex){
+                    System.out.println(ex.getMessage());
+                }
                 dispose();
             }
         });

@@ -44,8 +44,12 @@ public class CutSequenceFromTableFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int length = Integer.parseInt(textFieldLengthOfCells.getText());
 
-                addStringToCutInClipboard(row, column, length, byteTableModel.getDate());
-                byteTableModel.clearCells(row, column, length);
+                try {
+                    addStringToCutInClipboard(row, column, length, byteTableModel.getDate());
+                    byteTableModel.clearCells(row, column, length);
+                }catch(IndexOutOfBoundsException ex){
+                    System.out.println(ex.getMessage());
+                }
                 dispose();
             }
         });
@@ -54,6 +58,7 @@ public class CutSequenceFromTableFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 int length = Integer.parseInt(textFieldLengthOfCells.getText());
 
+                try{
                 addStringToCutInClipboard(row, column, length, byteTableModel.getDate());
                 List<String[]> dataCleared = byteTableModel.clearCellsWithShift(row,column,length);
 
@@ -61,6 +66,10 @@ public class CutSequenceFromTableFrame extends JFrame{
                 byteTableModelInserted.addDate(dataCleared);
 
                 jTable.setModel(byteTableModelInserted);
+                }catch(IndexOutOfBoundsException ex){
+                    System.out.println(ex.getMessage());
+                }
+
                 dispose();
             }
         });

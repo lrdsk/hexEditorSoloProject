@@ -72,8 +72,10 @@ public class ShowFindIndexesFrame extends JFrame implements PatternFoundCallback
 
         StringBuilder text = new StringBuilder();
 
-        if(listIndexes.isEmpty()) {
-            text.append("Введенная вами последовательность для поиска не найдена.");
+        if(listIndexes.isEmpty() && !taskComplete) {
+            text.append("Ожидание");
+        }else if(listIndexes.isEmpty()){
+            text.append("Последовательность не найдена.");
         }
 
         buttonNext.addActionListener(new ActionListener() {

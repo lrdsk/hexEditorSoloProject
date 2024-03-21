@@ -16,8 +16,8 @@ public class SequenceFrame extends JFrame {
     private final JButton buttonToDoubleDoublePrecision;
     private final int lengthSeq;
     private final List<String[]> stringsArray;
-    private final int rowIndex;
-    private final int columnIndex;
+    private int rowIndex;
+    private int columnIndex;
     public SequenceFrame(int rowIndex, int columnIndex, int lengthSeq, List<String[]> stringsArray) throws HeadlessException{
         this.jLabelSeq = new JLabel();
         this.buttonToDecimalSigned = new JButton("10-ое со знаком");
@@ -37,6 +37,10 @@ public class SequenceFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        if(rowIndex < 0 || columnIndex < 0){
+            rowIndex = 0;
+            columnIndex = 0;
+        }
         String[] hexSequence = SequenceHandler.getSequenceByIndex(rowIndex, columnIndex, lengthSeq, stringsArray);
         StringBuilder stringSequence = new StringBuilder();
         for(String s : hexSequence){

@@ -58,7 +58,7 @@ public class FileDisplayFrame extends JFrame {
         this.stringsArray = customFilePageReader.readBytesToTableModel(100);
         this.readPages = customFilePageReader.getReadPages();
         this.path = customFilePageReader.getPath();
-        this.byteTableModel = new ByteTableModel(customFilePageReader.getPageSize());
+        this.byteTableModel = new ByteTableModel(customFilePageReader.getPageSize() + 1);
         this.byteTable = new JTable(byteTableModel);
         this.byteTableScrollPane = new JScrollPane(byteTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -216,7 +216,7 @@ public class FileDisplayFrame extends JFrame {
     public void setNextPage(int readPages) {
         try (CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages)) {
             if (readPages < customPageFileReader.getPageCount()) {
-                ByteTableModel newPageModel = new ByteTableModel(256);
+                ByteTableModel newPageModel = new ByteTableModel(257);
                 newPageModel.addDate(customPageFileReader.readBytesToTableModel(100));
                 this.readPages += customPageFileReader.getReadPages();
 
@@ -231,7 +231,7 @@ public class FileDisplayFrame extends JFrame {
     public void setCurrentPage(int readPages) {
         try (CustomFilePageReader customFilePageReader = new CustomFilePageReader(path, 256, readPages)) {
             if (readPages < customFilePageReader.getPageCount()) {
-                ByteTableModel newPageModel = new ByteTableModel(256);
+                ByteTableModel newPageModel = new ByteTableModel(257);
                 newPageModel.addDate(customFilePageReader.readBytesToTableModel(100));
                 byteTable.setModel(newPageModel);
 
@@ -249,7 +249,7 @@ public class FileDisplayFrame extends JFrame {
         try (CustomFilePageReader customPageFileReader = new CustomFilePageReader(path, 256, readPages - 100)) {
             stringsArray = customPageFileReader.readBytesToTableModel(100);
 
-            ByteTableModel newPageModel = new ByteTableModel(256);
+            ByteTableModel newPageModel = new ByteTableModel(257);
             newPageModel.addDate(stringsArray);
             byteTable.setModel(newPageModel);
 

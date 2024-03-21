@@ -14,7 +14,6 @@ public class CustomFilePageReader implements AutoCloseable {
     private int currentPage = 0;
     private byte[] data;
     private final Path path;
-    private int pagesToRead = 100;
     private int readPages;
 
     public CustomFilePageReader(Path file, int pageSize) throws IOException {
@@ -95,8 +94,11 @@ public class CustomFilePageReader implements AutoCloseable {
         return readPages;
     }
     public int getPageCount() throws IOException {
-        long fileSize = ram.length();
-        return (int) Math.ceil((double) fileSize / pageSize);
+        if(ram != null){
+            long fileSize = ram.length();
+            return (int) Math.ceil((double) fileSize / pageSize);
+        }
+        return 0;
     }
 
     public byte[] getCurrentPage() {

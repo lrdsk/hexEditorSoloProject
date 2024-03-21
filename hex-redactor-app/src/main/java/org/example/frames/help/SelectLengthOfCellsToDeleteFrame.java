@@ -50,12 +50,16 @@ public class SelectLengthOfCellsToDeleteFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int length = Integer.parseInt(textFieldLengthOfCells.getText());
+                try{
                 List<String[]> dataCleared = byteTableModel.clearCellsWithShift(row,column,length);
 
                 ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataCleared));
                 byteTableModelInserted.addDate(dataCleared);
 
                 jTable.setModel(byteTableModelInserted);
+                }catch(IndexOutOfBoundsException ex){
+                    System.out.println(ex.getMessage());
+                }
                 dispose();
             }
         });
