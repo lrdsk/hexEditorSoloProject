@@ -46,7 +46,7 @@ public class InsertSequenceIntoTableFrame extends JFrame{
                 String[] cellsToInsert = sequenceText.split(" ");
 
                 try{
-                List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, false);
+                List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, false, byteTableModel.getDate());
 
                 ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
                 byteTableModelInserted.addDate(dataInserted);
@@ -65,7 +65,7 @@ public class InsertSequenceIntoTableFrame extends JFrame{
                 String sequenceText = textFieldSequence.getText();
                 String[] cellsToInsert = sequenceText.split(" ");
                 try {
-                    List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, true);
+                    List<String[]> dataInserted = byteTableModel.insertCells(row, column, cellsToInsert, true, byteTableModel.getDate());
 
                     ByteTableModel byteTableModelInserted = new ByteTableModel(SequenceHandler.getMaxColumnCountInTable(dataInserted));
                     byteTableModelInserted.addDate(dataInserted);

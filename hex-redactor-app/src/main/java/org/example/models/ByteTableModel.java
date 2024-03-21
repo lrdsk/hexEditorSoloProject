@@ -86,8 +86,8 @@ public class ByteTableModel extends AbstractTableModel {
         return dataCleared;
     }
 
-    public List<String[]> insertCells(int rowIndex, int columnIndex, String[] cells, boolean replacement){
-        List<String[]> dataArrayListInserted = dataArrayList;
+    public List<String[]> insertCells(int rowIndex, int columnIndex, String[] cells, boolean replacement, List<String[]> table){
+        List<String[]> dataArrayListInserted = table;
         String[] currentRow = dataArrayList.get(rowIndex);
         String[] rowToInsert;
 

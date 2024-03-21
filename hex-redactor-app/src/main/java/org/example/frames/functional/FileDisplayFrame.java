@@ -110,7 +110,7 @@ public class FileDisplayFrame extends JFrame {
         buttonInsertCell.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new InsertSequenceIntoTableFrame(byteTable, byteTableModel, getIndexesCellInTable()).setVisible(true);
+                new InsertSequenceIntoTableFrame(byteTable, (ByteTableModel) byteTable.getModel(), getIndexesCellInTable()).setVisible(true);
             }
         });
         buttonFileMenu.addActionListener(new ActionListener() {
