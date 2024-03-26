@@ -1,0 +1,16 @@
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/functional/ShowDecimalByteFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/help/CutSequenceFromTableFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/help/ShowFindIndexesFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/functional/FileDisplayFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/functional/FileChooser.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/help/SelectLengthOfCellsToDeleteFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/Main.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/utils/CustomFilePageReader.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/models/ByteTableModel.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/help/InsertSequenceIntoTableFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/functional/SearchFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/functional/SequenceFrame.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/utils/SequenceHandler.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/services/PatternFoundCallbackService.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/utils/CustomPageFileWriter.java
+/home/user/java_tasks/hex-redactor/110-java-swing-ymikhailov/hex-redactor-app/src/main/java/org/example/frames/help/SelectLengthSeqFrame.java
